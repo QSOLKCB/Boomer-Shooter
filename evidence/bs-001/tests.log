@@ -1,0 +1,24 @@
+✔ engine limitation and consumer armour parity: a real armour pickup absorbs damage on the same actor (9.889588ms)
+✔ stone stops hitscan and travelling splash; unoccluded projectile travels before damaging a rival (6.979124ms)
+✔ simultaneous real shots produce both eliminations before the match ranks the tick (1.331685ms)
+✔ precision needs an edge, repeater sustains, timers survive switching, reload consumes reserve (118.749926ms)
+✔ 16 actors and 64 active rounds are hard caps; rejected rounds consume ammo, expiry releases slots (788.384065ms)
+✔ a cardinal quaternion one ULP outside the Combat3D interval is admitted without changing its ray (2.31947ms)
+✔ human fires a real rivet frag, bots eliminate one another and the operator; default match ends with consistent accounts (2452.113634ms)
+✔ isolated playback at 30, 60 and 120 Hz reproduces accepted commands, event and state digests (1332.025067ms)
+✔ content and command rejection preserves the active match byte for byte (10.798526ms)
+✔ real movement hits the wall, clears a staircase and jumps without tunnelling (16.919121ms)
+✔ respawns avoid occupied volumes and choose the best admitted cover/distance score deterministically (4.04415ms)
+✔ timed pads award a single eligible claimant, cap armour and preserve frags after recasting (49.967522ms)
+✔ ties use fewer deaths then code-unit actor ID; a simultaneous limit wins over the time limit (0.26208ms)
+✔ bounded clock drops long gaps and resets debt across pause and resume (0.201485ms)
+✔ simultaneous nearby pad claim goes to the first eligible living actor in engine ID order (4.264486ms)
+✔ every upstream byte and transitive import is receipted; consumer derivative is reproducible (7.037246ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4039.646903

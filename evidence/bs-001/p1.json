@@ -1,0 +1,115 @@
+{
+  "environment": {
+    "runtimeSHA256": "4cad253aac315aead9f9c7e8f954ce4f5abb20b3e657f6eda44d9ab17e9c1913",
+    "runtimeMatchesHead": true,
+    "source": "5e04b4b0b5bd3029b5cb046a5673bc7b695a0716",
+    "engine": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+    "browser": "151.0.7922.34",
+    "binarySHA256": "e11fc9ce65c96313476f7ee9844b6fb6a9220fb048693cfe9eee00acf4170a9f",
+    "playwright": "1.62.0",
+    "os": "Linux",
+    "kernel": "6.18.57",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)",
+    "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+    "dpr": 1,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "drawingBuffer": [
+      1920,
+      1080
+    ]
+  },
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  },
+  "seed": 1179603527,
+  "arena": "1e128a8294787ed975b27a93a9a749413f9acf8c1753d246b76a4ea62c16740a",
+  "state": "98a1475fd51f615eb1b0c45a71bf4e1dda299b30c680bd65c031adb65d7eabae",
+  "events": "1b572b1252a5353b40cc529193ea270a39f91bcfd2795c66cc63f3b2ea5b5af1",
+  "interval": "tick 121 through 720; first 120 warm-up ticks excluded",
+  "frames": 150,
+  "ticks": 600,
+  "sampledWallSeconds": 10.9995,
+  "frameIntervalMs": {
+    "p50": 66.7,
+    "p95": 133.3,
+    "p99": 233.4
+  },
+  "callbackMs": {
+    "p50": 3.8,
+    "p95": 7.5,
+    "p99": 12.3
+  },
+  "stepMs": {
+    "p50": 0.6,
+    "p95": 1.4,
+    "p99": 3
+  },
+  "maxStepsInFrame": 5,
+  "droppedSeconds": 1.0001333333333335,
+  "spikesOver33ms": 138,
+  "drawCalls": {
+    "2": 14,
+    "3": 117,
+    "4": 19
+  },
+  "submittedTriangles": [
+    10002,
+    10722
+  ],
+  "peakProjectiles": 1,
+  "actors": 4,
+  "livingActors": [
+    2,
+    4
+  ],
+  "sampleWork": {
+    "targetSightRays": 404,
+    "coverRays": 10,
+    "pathQueries": 41,
+    "cellsExpanded": 436
+  },
+  "entireMatchWork": {
+    "paths": 272,
+    "expanded": 3206,
+    "sight": 2670,
+    "coverRays": 101,
+    "coverMoves": 59
+  },
+  "result": {
+    "winner": "kiln",
+    "reason": "frag limit"
+  },
+  "endTick": 4220,
+  "ranking": [
+    {
+      "id": "kiln",
+      "kills": 10,
+      "deaths": 3
+    },
+    {
+      "id": "flux",
+      "kills": 4,
+      "deaths": 3
+    },
+    {
+      "id": "vise",
+      "kills": 4,
+      "deaths": 6
+    },
+    {
+      "id": "player",
+      "kills": 0,
+      "deaths": 6
+    }
+  ],
+  "browserReplayVerified": true,
+  "offlineRematch": true
+}

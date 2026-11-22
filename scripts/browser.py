@@ -265,6 +265,67 @@ def interactions(browser, url, out, exe):
         lifecycleInjection=["document hidden", "pagehide"], restarts=retained, disposed=disposed, fallbacks=fallbacks))
 
 
+def frag_ledger(page, tape, arena_text):
+    return page.evaluate("""async ([tape,text])=>{
+      const {Match}=await import('./src/sim/match.js'), {readArena}=await import('./src/sim/arena.js');
+      const {receipt}=await import('./src/sim/replay.js'), match=new Match(readArena(text),tape), deaths=[];
+      for(const [n,command] of tape.runs) for(let i=0;i<n;i++){
+        if(!match.step(command))throw Error('Early match end');
+        deaths.push(...match.events.filter(e=>e.type==='death'));
+      }
+      const checked=await receipt(match,text);
+      if(checked.events!==tape.events||checked.state!==tape.state)throw Error('Frag ledger replay diverged');
+      return {ticks:checked.ticks,state:checked.state,events:checked.events,deaths};
+    }""", [tape, arena_text])
+
+
+def playthrough(browser, url, out, exe):
+    ctx, page, errors = page_for(browser, url, 1280, 760)
+    meta = environment(page, browser, exe)
+    ctx.set_offline(True)
+    page.locator("#action").click()
+    page.keyboard.press("f")
+    wait(page, "foundry.inspect().actors.find(a=>a.id==='player').kills===1")
+    opening = state(page)["feed"][-1]
+    assert opening["source"] == "player" and opening["target"] != "player"
+    page.keyboard.down("w")
+    page.keyboard.down("Shift")
+    page.keyboard.press("Space")
+    page.keyboard.press("2")
+    page.keyboard.down("f")
+    wait(page, "foundry.inspect().weapons.find(a=>a.actor==='player').timers[1].ammo<=25")
+    page.keyboard.up("w")
+    page.keyboard.up("Shift")
+    page.keyboard.up("f")
+    page.keyboard.press("r")
+    page.keyboard.down("Tab")
+    assert page.locator("#board tbody tr").count() == 4
+    page.keyboard.up("Tab")
+    wait(page, "foundry.inspect().mode==='over'", timeout=420000)
+    final = state(page)
+    player = actor(final)
+    cpu_frags = sum(a["kills"] for a in final["actors"] if a["id"] != "player")
+    # Each rival frag can be attributed only once. Subtracting every player
+    # death gives a conservative lower bound on eliminations between rivals.
+    assert cpu_frags > player["deaths"] and player["kills"] >= 1
+    assert max(a["kills"] for a in final["actors"]) >= 10
+    tape = page.evaluate("foundry.replay()")
+    dump(out / "played-replay.json", tape)
+    dump(out / "frag-ledger.json", frag_ledger(page,tape,(ROOT/"content/foundry.json").read_text()))
+    page.locator("#options").click()
+    page.locator("#replay-file").set_input_files({"name":"played.json","mimeType":"application/json","buffer":json.dumps(tape).encode()})
+    wait(page, "t=>document.getElementById('message').textContent.startsWith('Verified '+t+' ticks')",arg=tape["ticks"],timeout=90000)
+    page.locator("#action").click()
+    wait(page, "foundry.inspect().tick>=4")
+    assert all(a["kills"] == 0 for a in state(page)["actors"])
+    assert not any(errors.values()), errors
+    dump(out / "played-match.json", dict(environment=meta,openingFrag=opening,result=final["result"],endTick=tape["ticks"],
+        rules={"fragLimit":tape["limit"],"durationTicks":tape["duration"]},cpuVersusCpuFragsAtLeast=cpu_frags-player["deaths"],
+        scores=[{k:a[k] for k in ("id","kills","deaths")} for a in final["actors"]],
+        state=tape["state"],events=tape["events"],browserReplayVerified=True,offlineRematch=True,errors=errors))
+    ctx.close()
+
+
 def quantiles(rows):
     values = sorted(rows)
     return {key: round(values[math.ceil(len(values)*q)-1], 4) for key, q in (("p50", .5), ("p95", .95), ("p99", .99))}
@@ -324,7 +385,7 @@ def reference(browser, url, out, exe):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--chromium", default=os.environ.get("CHROMIUM"))
-    parser.add_argument("--suite", choices=["all", "interactions", "reference"], default="all")
+    parser.add_argument("--suite", choices=["all", "interactions", "reference", "playthrough"], default="all")
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
@@ -334,6 +395,8 @@ def main():
             interactions(browser, url, args.out, args.chromium)
         if args.suite in ("all", "reference"):
             reference(browser, url, args.out, args.chromium)
+        if args.suite in ("all", "playthrough"):
+            playthrough(browser, url, args.out, args.chromium)
         browser.close()
 
 

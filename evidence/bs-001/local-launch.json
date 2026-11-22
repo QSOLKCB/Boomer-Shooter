@@ -1,0 +1,16 @@
+{
+  "game": "5e04b4b0b5bd3029b5cb046a5673bc7b695a0716",
+  "launch": "python3 -m http.server 8000 --bind 127.0.0.1",
+  "url": "http://127.0.0.1:8000/",
+  "browser": "151.0.7922.34",
+  "mode": "playing",
+  "slots": 4,
+  "openingFrag": {
+    "tick": 1,
+    "type": "death",
+    "source": "player",
+    "target": "kiln",
+    "weapon": "rivet",
+    "shot": 1
+  }
+}
