@@ -13,11 +13,9 @@ export function start(arenaText) {
   let scene=new Scene(canvas,arena), match=slot.current, metrics=new Metrics();
   const clock=new FixedClock({step:STEP,maxFrame:.20,maxSteps:5}), sound=new Sound();
   const lifetime=new AbortController(), on=(target,name,fn)=>target.addEventListener(name,fn,{signal:lifetime.signal});
-  let mode='menu', previous=null, raf=0, disposed=false, verification=0;
+  let mode='menu', previous=null, raf=0, disposed=false, verification=0, entryHeld=false;
   const livingInput=()=>mode==='playing'&&match.actor('player').health>0;
-  const input=controls(canvas,livingInput,()=>mode==='arming'||livingInput(),()=>{
-    if(mode==='arming') begin();
-  },()=>pause('Mouse released.'),()=>{
+  const input=controls(canvas,livingInput,()=>mode==='arming'||livingInput(),beginCaptured,()=>pause('Mouse released.'),()=>{
     el('gate-message').textContent='Mouse capture is unavailable. The clock is stopped. Click here to retry, or play with drag or arrow keys.';
     el('capture-hint').textContent='Drag to aim · F fires · Esc pauses';
   });
@@ -74,7 +72,7 @@ export function start(arenaText) {
         movement:el('movement').value,difficulty:el('difficulty').value});
       match=candidate;metrics=new Metrics();scene.reset();clock.reset();el('notice').textContent='';
     }
-    setMode('arming');clock.setPaused(true);previous=null;input.clear();input.useDrag(false);
+    setMode('arming');clock.setPaused(true);previous=null;entryHeld=false;input.clear();input.useDrag(false);
     el('gate-message').textContent='Waiting for mouse capture. The match clock is stopped.';
     el('capture-hint').textContent='Arrow keys aim · F fires · Esc pauses';
     render();
@@ -85,10 +83,28 @@ export function start(arenaText) {
   }
   function begin() {
     if(mode!=='arming'||disposed)return;
+    cancelAnimationFrame(raf);raf=0;
     setMode('playing');clock.setPaused(false);previous=null;
     if(!input.locked)canvas.focus();
     updateHUD(match,input.locked,scene);raf=requestAnimationFrame(frame);
   }
+  function beginCaptured() {
+    if(mode!=='arming' || entryHeld || !input.locked || raf)return;
+    // Chromium can echo the unlocked cursor's reposition at the end of the
+    // join click. Drain that gesture before admitting the first look sample.
+    raf=requestAnimationFrame(()=>{
+      raf=0;
+      if(mode==='arming' && !entryHeld && input.locked){input.discardPointerSample();begin();}
+    });
+  }
+  on(document,'pointerdown',e=>{
+    if(mode==='arming' && e.pointerType==='mouse' && e.button===0)entryHeld=true;
+  });
+  for(const event of ['pointerup','pointercancel'])on(document,event,e=>{
+    if(mode==='arming' && e.pointerType==='mouse' && (e.button===0 || event==='pointercancel')){
+      entryHeld=false;beginCaptured();
+    }
+  });
   for(const button of [el('action'),el('new')]) {
     const fresh=()=>button===el('new') || mode!=='paused';
     on(button,'pointerdown',e=>{

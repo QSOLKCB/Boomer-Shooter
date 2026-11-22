@@ -34,6 +34,7 @@ export function controls(canvas,enabled,mouseEnabled,onLock,unlock,onError) {
   return {
     get locked(){return mouse.locked;},
     useDrag(value){dragOnly=value;},
+    discardPointerSample(){mouse.consume();},
     clear(release=true){
       keyboard.clear();mouse.consume();if(release)mouse.release();
       if(drag && canvas.hasPointerCapture(drag.id))canvas.releasePointerCapture(drag.id);
