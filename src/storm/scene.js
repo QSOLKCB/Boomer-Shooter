@@ -3,6 +3,7 @@ import {characterView} from '../../vendor/vanillajs/modules/character/index.js';
 import {perspective,multiplyMatrices,viewMatrix} from '../../vendor/vanillajs/modules/math/index.js';
 import {viewGun} from '../view/models.js';
 import {CHARGE,gateLane} from './patterns.js';
+import {BoxVertexStream,BOX_STREAM_FLOATS} from '../../vendor/render-packing/index.js';
 import {CORE} from './encounter.js';
 
 const coal=[.11,.14,.17],iron=[.25,.32,.35],edge=[.42,.48,.47],brass=[.66,.40,.19];
@@ -68,26 +69,41 @@ function court() {
   for(let i=0;i<5;i++)box((i-2)*.64,3.88,-10.35,.44,.54,.6,brass);
   return out;
 }
-// Reuse one packed stream for all boxes. Cube coordinates use exactly the
-// half-extents tested by the simulation, including the low sweep wall.
-const cube=Float32Array.from(boxVertices([0,0,0],[2,2,2],[1,1,1]));
+// Keep the established emissive colours and face order. Identical source kinds
+// share a template; compacted slots need new RGB only when their kind changes.
+const unitBox=new BoxVertexStream(1).appendXYZRGB(0,0,0,2,2,2,1,1,1).view();
+const heads=colors.map(rgb=>{
+  const shape=unitBox.slice();
+  for(let i=0;i<shape.length;i+=6)
+    for(let j=0;j<3;j++)shape[i+3+j]=rgb[j]*(.75+unitBox[i+3+j]*.85);
+  return shape;
+});
+const coreCenter=CORE.min.map((v,i)=>(v+CORE.max[i])/2);
+const coreSize=CORE.max.map((v,i)=>v-CORE.min[i]);
+// Two 32-segment rings, and twelve triangles for the moving blades.
+const turbineFloats=(2*32*6+12*3)*6;
 export class StormScene {
   constructor(canvas,capacity=256) {
     this.r=new Renderer(canvas);const r=this.r;
     this.world=r.mesh(court());this.machine=r.mesh([]);this.bullets=r.mesh([]);
     this.lines=r.mesh([],'lines');this.gun=r.mesh(viewGun(1));
-    this.packed=new Float32Array(cube.length*capacity);
+    this.packed=new Float32Array(BOX_STREAM_FLOATS*capacity);
+    this.kind=new Int8Array(capacity).fill(-1);
+    this.props=new BoxVertexStream(6+16); // core, five grilles, up to sixteen warning markers
+    this.machineData=new Float32Array(this.props.capacityBoxes*BOX_STREAM_FLOATS+turbineFloats);
     this.trails=new Float32Array(12*capacity);this.stats={};
     r.gl.clearColor(.055,.079,.106,1);
   }
   draw(game,alpha=1,scale=1) {
+    if(game.field.live.length>this.kind.length)throw RangeError('Hazards exceed the scene packing capacity');
     const r=this.r,gl=r.gl,body=game.body,eye=characterView(body);
     for(let i=0;i<3;i++)eye.position[i]+=(game.previous[i]-body.position[i])*(1-alpha);
     r.begin(eye.position,eye.orientation,{fov:1.24,fog:.019,resolution:scale});
     const dyn=[],color=phaseColors[game.phase-1],t=game.tick+alpha;
-    const coreCenter=CORE.min.map((v,i)=>(v+CORE.max[i])/2);
-    boxVertices(coreCenter,CORE.max.map((v,i)=>v-CORE.min[i]),game.boss?color:coal,dyn);
-    for(let i=-2;i<=2;i++)boxVertices([i*.54,1.92,-9.18],[.095,2.7,.05],brass,dyn);
+    const props=this.props.reset();
+    props.append(coreCenter,coreSize,game.boss?color:coal);
+    for(let i=-2;i<=2;i++)props.appendXYZRGB(i*.54,1.92,-9.18,.095,2.7,.05,...brass);
+    const fixed=props.usedFloats;
     ring(dyn,0,1.95,-9.13,1.13,.13,light,32);
     for(let i=0;i<12;i++){
       const a=t*.016+i*tau/12;
@@ -99,28 +115,39 @@ export class StormScene {
       const plan=game.plan;
       if(plan.kind===3) {
         const lane=gateLane(plan,game.age<=CHARGE?0:30);
-        for(const s of [-1,1])boxVertices([lane+s*2.45,.035,3],[.09,.02,23],ice,dyn);
+        for(const s of [-1,1])props.appendXYZRGB(lane+s*2.45,.035,3,.09,.02,23,...ice);
       } else if(plan.kind===0) {
-        for(let j=1;j<=16;j++)boxVertices([Math.sin(plan.angle)*j,.035,-8.5+Math.cos(plan.angle)*j],[.13,.018,.36],heat,dyn);
+        for(let j=1;j<=16;j++)props.appendXYZRGB(Math.sin(plan.angle)*j,.035,-8.5+Math.cos(plan.angle)*j,.13,.018,.36,...heat);
       } else if(plan.kind===4) {
-        for(let x=-11;x<=11;x+=2)boxVertices([x,.035,-7],[1.3,.018,.13],ice,dyn);
+        for(let x=-11;x<=11;x+=2)props.appendXYZRGB(x,.035,-7,1.3,.018,.13,...ice);
       }
     }
-    r.update(this.machine,dyn);
-    let n=0,l=0;
+    const boxes=props.view(),machine=this.machineData;
+    machine.set(boxes.subarray(0,fixed));
+    machine.set(dyn,fixed);
+    machine.set(boxes.subarray(fixed),fixed+dyn.length);
+    r.update(this.machine,machine.subarray(0,boxes.length+dyn.length));
+    let slot=0,l=0;
     for(const h of game.field.live){
       const x=h.position[0]-h.delta[0]*(1-alpha),y=h.position[1]-h.delta[1]*(1-alpha),z=h.position[2]-h.delta[2]*(1-alpha);
       const c=colors[h.source];
-      for(let i=0;i<cube.length;i+=6){
-        this.packed[n++]=x+cube[i]*h.half[0];this.packed[n++]=y+cube[i+1]*h.half[1];this.packed[n++]=z+cube[i+2]*h.half[2];
-        for(let j=0;j<3;j++)this.packed[n++]=c[j]*(.75+cube[i+3+j]*.85);
+      const base=slot*BOX_STREAM_FLOATS;
+      if(this.kind[slot]!==h.source){
+        this.packed.set(heads[h.source],base);
+        this.kind[slot]=h.source;
       }
+      for(let i=0;i<BOX_STREAM_FLOATS;i+=6){
+        this.packed[base+i]=x+unitBox[i]*h.half[0];
+        this.packed[base+i+1]=y+unitBox[i+1]*h.half[1];
+        this.packed[base+i+2]=z+unitBox[i+2]*h.half[2];
+      }
+      slot++;
       this.trails[l++]=x;this.trails[l++]=y;this.trails[l++]=z;
       for(const v of c)this.trails[l++]=v;
       this.trails[l++]=x-h.delta[0]*2.5;this.trails[l++]=y-h.delta[1]*2.5;this.trails[l++]=z-h.delta[2]*2.5;
       for(const v of c)this.trails[l++]=v*.38;
     }
-    const start=performance.now();
+    const n=slot*BOX_STREAM_FLOATS,start=performance.now();
     r.update(this.bullets,this.packed.subarray(0,n));r.update(this.lines,this.trails.subarray(0,l));
     const uploaded=performance.now();let calls=0;
     for(const mesh of [this.world,this.machine,this.lines,this.bullets])if(mesh.count){r.draw(mesh);calls++;}
@@ -129,7 +156,7 @@ export class StormScene {
     gl.uniformMatrix4fv(r.vp,false,multiplyMatrices(perspective(1.14,gl.drawingBufferWidth/gl.drawingBufferHeight,.04,12),
       viewMatrix([0,0,-kick*.32],[0,0,0,1])));
     gl.uniform1f(r.fog,0);r.draw(this.gun);
-    this.stats={calls:calls+1,heads:n/cube.length,uploadBytes:4*(n+l),hazardUploadMs:uploaded-start,drawSubmitMs:performance.now()-uploaded};
+    this.stats={calls:calls+1,heads:slot,uploadBytes:4*(n+l),hazardUploadMs:uploaded-start,drawSubmitMs:performance.now()-uploaded};
   }
-  dispose(){this.r.dispose();this.packed=null;this.trails=null;}
+  dispose(){this.r.dispose();this.packed=null;this.trails=null;this.kind=null;this.machineData=null;this.props=null;}
 }

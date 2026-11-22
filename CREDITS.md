@@ -12,6 +12,7 @@ QSOL-IMC • BS-001. The project distributes its first-party game under Apache-2
 | `src/storm/scene.js`, `storm.html`, `src/storm/storm.css` | Original reactor court, turbine blades, induction stacks, hazard geometry and operator interface authored for this encounter. The Arc Driver reuses the project’s Arc Repeater view model | Repository LICENSE |
 | `src/storm/game.js` | Original reactor pulse, fifth, warning bell, driver and impact score synthesized from local oscillators and noise | Repository LICENSE |
 | `vendor/vanillajs/` | QSOLKCB/VANILLAJS v3.2.0. Exact upstream bytes, paths and SHA-256 digests | Upstream LICENSE and NOTICE in that directory |
+| `vendor/render-packing/index.js` | Byte-exact optional VANILLAJS render-packing module, pinned to PR #151 merge a2bc2dbbb2e2a28fb8857eb7916f1bb374d3c85c | Existing upstream LICENSE and NOTICE in `vendor/vanillajs/` are identical at both pins |
 | `src/engine/combat3d.js` | Generated from the pinned Combat3D source plus the isolated consumer armour adapter | Upstream Apache-2.0 and NOTICE apply. See the manifest and integration recipe |
 
 The screenshots in the evidence directory were captured from the packaged game in Chromium. The game generates the displayed art and sound locally.

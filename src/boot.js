@@ -20,6 +20,10 @@ async function boot() {
     if(await digest(await bytes(path))!==hash) throw new Error('Engine file differs from the receipt: '+path);
   }));
   if(document.body.dataset.game==='storm'){
+    const packing=await bytes('vendor/render-packing/manifest.json');
+    if(await digest(packing)!=='e17239dca10ba3235c901e5461e9543f88963dd3470846388cd9d4b4f172eb5c' ||
+       await digest(await bytes('vendor/render-packing/index.js'))!==JSON.parse(new TextDecoder().decode(packing)).sha256)
+      throw new Error('Reactor geometry module differs from its source receipt.');
     const {startStorm}=await import('./storm/game.js');
     startStorm();return;
   }

@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/QSOLKCB/VANILLAJS",
+  "commit": "a2bc2dbbb2e2a28fb8857eb7916f1bb374d3c85c",
+  "upstreamPath": "modules/render-packing/index.js",
+  "sha256": "c42239a5be626feb53f11243dddaa034821daaa7ca667741495420dca8558733",
+  "dependencies": [],
+  "license": "../vanillajs/LICENSE",
+  "notice": "../vanillajs/NOTICE"
+}
