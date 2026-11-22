@@ -12,13 +12,16 @@ import math
 import os
 from pathlib import Path
 import platform
-import shutil
 import subprocess
 import tempfile
 from threading import Thread
 from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
+if __package__:
+    from .package_pages import package
+else:
+    from package_pages import package
 
 ROOT = Path(__file__).resolve().parents[1]
 GPU_HOOK = """(() => {
@@ -44,17 +47,13 @@ class Quiet(SimpleHTTPRequestHandler):
 @contextmanager
 def packaged():
     with tempfile.TemporaryDirectory() as tmp:
-        dest = Path(tmp) / "local/pit"
-        dest.mkdir(parents=True)
-        for name in ("content", "src", "vendor"):
-            shutil.copytree(ROOT / name, dest / name)
-        for name in ("index.html", "style.css"):
-            shutil.copy(ROOT / name, dest)
+        dest = Path(tmp) / "Boomer-Shooter"
+        package(dest)
         srv = ThreadingHTTPServer(("127.0.0.1", 0), partial(Quiet, directory=tmp))
         thread = Thread(target=srv.serve_forever, daemon=True)
         thread.start()
         try:
-            yield f"http://127.0.0.1:{srv.server_port}/local/pit/"
+            yield f"http://127.0.0.1:{srv.server_port}/Boomer-Shooter/"
         finally:
             srv.shutdown()
             srv.server_close()
