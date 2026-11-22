@@ -11,23 +11,26 @@ export async function sha(text) {
 export async function receipt(match,arenaText) {
   // Snapshot synchronously, including the accepted tape, before any async hashing.
   const snapshot=JSON.stringify(match.canonical()), events=match.eventRows.join('\n'), runs=structuredClone(match.tape);
-  const result={format:'foundry-pit.replay.1',engine:ENGINE,seed:match.seed,limit:match.limit,duration:match.duration,ticks:match.tick,runs};
+  const tuning=match.rulesVersion===2 ? {movement:match.movement,difficulty:match.difficulty} : {};
+  const result={format:'foundry-pit.replay.'+match.rulesVersion,engine:ENGINE,seed:match.seed,limit:match.limit,duration:match.duration,ticks:match.tick,runs,...tuning};
   const [arena,state,history]=await Promise.all([sha(arenaText),sha(snapshot),sha(events)]);
   return {...result,arena,state,events:history};
 }
 
 export async function verify(text,arenaText,checkpoint) {
   if(typeof text!=='string'||text.length>4000000) throw new RangeError('Replay size');
-  const tape=fpsRecord(JSON.parse(text),['format','engine','seed','limit','duration','ticks','runs','arena','state','events']);
+  const raw=JSON.parse(text);
+  const modern=raw?.format==='foundry-pit.replay.2';
+  const tape=fpsRecord(raw,['format','engine','seed','limit','duration','ticks','runs','arena','state','events',...(modern?['movement','difficulty']:[])]);
   if (![tape.arena,tape.state,tape.events].every(value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value)))
     throw new TypeError('Expected SHA-256 replay digests');
-  if(tape.format!=='foundry-pit.replay.1'||tape.engine!==ENGINE||tape.arena!==await sha(arenaText)) throw new Error('Replay source mismatch');
-  const m=new Match(readArena(arenaText),tape);
+  if((!modern&&tape.format!=='foundry-pit.replay.1')||tape.engine!==ENGINE||tape.arena!==await sha(arenaText)) throw new Error('Replay source mismatch');
+  const m=new Match(readArena(arenaText),{...tape,rulesVersion:modern?2:1});
   if(!Number.isInteger(tape.ticks)||tape.ticks<0||tape.ticks>m.duration||!Array.isArray(tape.runs)||tape.runs.length>tape.ticks) throw new RangeError('Replay bounds');
   let count=0;
   for(const entry of tape.runs) {
     if(!Array.isArray(entry)||entry.length!==2||!Number.isInteger(entry[0])||entry[0]<1) throw new RangeError('Invalid run');
-    count+=entry[0]; if(count>tape.ticks) throw new RangeError('Extra commands'); checkCommand(entry[1]);
+    count+=entry[0]; if(count>tape.ticks) throw new RangeError('Extra commands'); checkCommand(entry[1],m.rulesVersion);
   }
   if(count!==tape.ticks) throw new RangeError('Incomplete tape');
   for(const [repeat,command] of tape.runs) for(let i=0;i<repeat;i++) {

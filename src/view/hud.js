@@ -21,7 +21,7 @@ export function scoreTable(target,actors) {
   }
   target.replaceChildren(table);
 }
-export function updateHUD(m,locked) {
+export function updateHUD(m,locked,scene) {
   const a=m.actor('player'), f=m.units[0].feel.presentation(), timer=m.loadout('player').timers[f.selected];
   put('hp',Math.ceil(a.health));put('ap',Math.ceil(a.armour));put('frags',a.kills);
   put('time',clockText(m.duration-m.tick));put('weapon-name',name(f.id).toUpperCase());put('ammo',String(timer.ammo).padStart(2,'0'));put('reserve',' / '+timer.reserve);
@@ -35,6 +35,13 @@ export function updateHUD(m,locked) {
   }
   el('damage').style.opacity=String(Math.min(.52,f.hurt*2));
   el('hitmark').style.opacity=String(f.hit>0?1:0);
+  el('hitmark').dataset.kind=scene.hitKind;
+  const cue=scene.incoming, arrow=el('incoming');
+  arrow.hidden=!a.health || !cue || m.tick-cue.tick>=28;
+  if(!arrow.hidden) {
+    arrow.style.setProperty('--bearing',(cue.angle+m.units[0].body.yaw)+'rad');
+    arrow.style.opacity=String(Math.min(1,(28-m.tick+cue.tick)/14));
+  }
   el('reticle').hidden=!a.health;
   el('capture-hint').hidden=locked||m.tick>550;
   if(!a.health)put('notice','Recasting  /  '+Math.max(0,(m.arena.pack.settings.rules.respawnTicks-(m.tick-a.deadAt))/60).toFixed(1)+' s');

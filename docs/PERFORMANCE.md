@@ -36,3 +36,5 @@ Preserve an uncomplicated low-graphics profile; aggressive culling must be conse
 ## Future reports
 
 Store measured results under `evidence/` (with source commit and test inputs) when they exist. No synthetic 'benchmark passes', invented GPU readings, hard-coded victory chart or unverified performance badges are allowed. The [first P1 run](../evidence/bs-001/README.md) includes source revisions, raw frame/step samples and a replay. Physical GPU timings remain open.
+
+The [BS-002 P1 record](../evidence/bs-002/README.md) pairs a BS-001 control on the same browser binary with the Arcade ruleset. Both runs used the same pack, seed and neutral operator commands. Bot decisions and match outcomes differ across the two rulesets.

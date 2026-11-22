@@ -42,8 +42,8 @@ export function sight(arena, from, to) {
   return distance < .0001 || !raycast(from, delta, distance, arena.pack.solids);
 }
 
-export function spawnPoint(arena, living) {
-  let best = null, bestScore = -Infinity;
+export function spawnPoint(arena, living, rulesVersion=2) {
+  let best = null, bestScore = -Infinity, bestRisk=Infinity;
   for (const p of arena.starts) {
     if (living.some(a => Math.abs(a.position[0]-p[0]) < .71 && Math.abs(a.position[2]-p[2]) < .71 && Math.abs(a.position[1]-p[1]) < 1.8)) continue;
     let nearest = 100, exposed = 0;
@@ -51,8 +51,13 @@ export function spawnPoint(arena, living) {
       nearest = Math.min(nearest, Math.hypot(...p.map((v,i)=>v-a.position[i])));
       if (sight(arena,[p[0],p[1]+1.3,p[2]],[a.position[0],a.position[1]+1.4,a.position[2]])) exposed++;
     }
-    const score = nearest - 7*exposed;
-    if (score > bestScore) { bestScore=score; best=p; }
+    // First avoid rivals within four metres, then minimise exposed sightlines.
+    // Distance breaks ties, followed by the admitted start order.
+    const risk=rulesVersion===1 ? 0 : exposed+(nearest<4?living.length+1:0);
+    const score=rulesVersion===1 ? nearest-7*exposed : nearest;
+    if (risk<bestRisk || (risk===bestRisk && score>bestScore)) {
+      bestRisk=risk; bestScore=score; best=p;
+    }
   }
   return best;
 }

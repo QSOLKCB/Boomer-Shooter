@@ -20,7 +20,7 @@ function variant(edit) {
 for (const jumping of [false,true]) {
   const direction=jumping?'upper':'lower';
   test(`pursuing the nearest rival reaches the ${direction} bot pitch bound and finishes the match`,()=>{
-    const m=game(), bound=(jumping?1:-1)*(Math.PI/2-.01);
+    const m=game({rulesVersion:1}), bound=(jumping?1:-1)*(Math.PI/2-.01);
     let reached=false;
     while (!m.result) {
       const [x,,z]=m.actor('player').position;
@@ -95,7 +95,7 @@ test('content and command rejection preserves the active match byte for byte',()
   for(const source of bad){assert.throws(()=>slot.replace(source));assert.equal(slot.current,m);}
   let evaluated=false;
   const accessor={get pack(){evaluated=true;throw Error();}};assert.throws(()=>slot.replace(accessor));assert.equal(evaluated,false);
-  for(const cmd of [[1,0,NaN,0,0,0],[0,0,0,0,64,0],[0,0,0,0,0,3],Array(6)])assert.throws(()=>m.step(cmd));
+  for(const cmd of [[1,0,NaN,0,0,0],[0,0,0,0,128,0],[0,0,0,0,0,3],Array(6)])assert.throws(()=>m.step(cmd));
   assert.equal(JSON.stringify(m.canonical()),before);assert.equal(slot.replace(text).tick,0);
 });
 
