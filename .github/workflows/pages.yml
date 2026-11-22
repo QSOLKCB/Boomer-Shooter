@@ -1,7 +1,7 @@
 name: The Foundry Pit on GitHub Pages
 on:
   push:
-    branches: [main, gh-pages]
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -22,14 +22,14 @@ jobs:
       - name: Test combat, controls and provenance
         run: node --test tests/*.test.mjs
       - name: Package the static runtime
-        run: python3 scripts/package_pages.py _site
+        run: python3 scripts/package_pages.py _site --revision "$GITHUB_SHA"
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
-        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gh-pages')
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           path: _site
   deploy:
     needs: verify
-    if: github.repository == 'QSOLKCB/Boomer-Shooter' && github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gh-pages')
+    if: github.repository == 'QSOLKCB/Boomer-Shooter' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
