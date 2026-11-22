@@ -1,0 +1,19 @@
+{
+  "url": "https://qsolkcb.github.io/Boomer-Shooter/",
+  "source": "a7efda6bc4661e349af5166b646043be72a0fa96",
+  "browser": "151.0.7922.34",
+  "entryClicks": 1,
+  "otherInput": 0,
+  "captured": false,
+  "mode": "playing",
+  "observedTick": 70,
+  "health": 8.107908490944553,
+  "armour": 0,
+  "deaths": 0,
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  }
+}

@@ -51,7 +51,7 @@ python3 scripts/browser.py --chromium /path/to/chromium --out /tmp/foundry-evide
 
 The [BS-001 evidence](evidence/bs-001/README.md) includes the packaged browser run, screenshots, replay, frame samples and hardware limitations.
 
-BS-002 records movement and bot skill in each replay and still reads BS-001 tapes. The [arcade tuning notes](docs/BS_002.md) describe the settings, source references and checks.
+BS-002 records movement and bot skill in each replay and still reads BS-001 tapes. [Arcade tuning notes](docs/BS_002.md) · [Mouse capture regression, match replays and 1080p timings](evidence/bs-002/README.md).
 
 ## Project documents
 

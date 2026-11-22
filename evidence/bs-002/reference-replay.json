@@ -1,0 +1,37 @@
+{
+  "format": "foundry-pit.replay.2",
+  "engine": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+  "seed": 1179603527,
+  "limit": 10,
+  "duration": 18000,
+  "ticks": 4575,
+  "runs": [
+    [
+      1,
+      [
+        0,
+        0,
+        0,
+        0,
+        32,
+        -1
+      ]
+    ],
+    [
+      4574,
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        -1
+      ]
+    ]
+  ],
+  "movement": "arcade",
+  "difficulty": "normal",
+  "arena": "1e128a8294787ed975b27a93a9a749413f9acf8c1753d246b76a4ea62c16740a",
+  "state": "5e1abb4bb29abc84dcd11fd7a19f0e35bc81dc01765bf2ab42ca20d34020fc1c",
+  "events": "fef898e5e38015a1525ca7911a28f419f44d1af511755bfc0e8c97f62f64b8d4"
+}

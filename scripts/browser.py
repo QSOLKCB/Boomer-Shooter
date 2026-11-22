@@ -170,6 +170,16 @@ def enter(page, button="#action", opening_shot=False, allow_drag=False):
     return "mouse capture"
 
 
+def wait_alive(page,deaths,condition):
+    result=page.wait_for_function("""deaths=>{
+      const s=foundry.inspect(),a=s.actors.find(a=>a.id==='player');
+      if(a.deaths!==deaths || !a.health)return 'dead';
+      const gun=s.weapons.find(w=>w.actor==='player');
+      return ("""+condition+""") && 'ready';
+    }""", arg=deaths,timeout=12000,polling=20)
+    return result.json_value()=="ready"
+
+
 def exercise_repeater(page, out):
     # A screenshot or a CDP round trip can span a death on a software renderer.
     # Only an observed elimination retries the sequence; a missing input still fails.
@@ -177,36 +187,27 @@ def exercise_repeater(page, out):
         wait(page,"foundry.inspect().actors.find(a=>a.id==='player').health>0")
         deaths=actor(state(page))["deaths"]
 
-        def during_life(condition):
-            result=page.wait_for_function("""deaths=>{
-              const s=foundry.inspect(),a=s.actors.find(a=>a.id==='player');
-              if(a.deaths!==deaths || !a.health)return 'dead';
-              const gun=s.weapons.find(w=>w.actor==='player');
-              return ("""+condition+""") && 'ready';
-            }""", arg=deaths,timeout=12000,polling=20)
-            return result.json_value()=="ready"
-
         page.keyboard.press("2")
-        if not during_life("gun.selected==='arc'"):
+        if not wait_alive(page,deaths,"gun.selected==='arc'"):
             continue
         page.mouse.down(button="right")
         try:
-            if not during_life("s.aim.ads && s.aim.fov<1.03"):
+            if not wait_alive(page,deaths,"s.aim.ads && s.aim.fov<1.03"):
                 continue
             capture(page,out,"focused-arc")
         finally:
             page.mouse.up(button="right")
-        if not during_life("!s.aim.ads && s.aim.fov>1.25"):
+        if not wait_alive(page,deaths,"!s.aim.ads && s.aim.fov>1.25"):
             continue
         page.mouse.down()
         try:
             page.mouse.move(690,355,steps=3)
-            if not during_life("gun.timers[1].ammo<=25"):
+            if not wait_alive(page,deaths,"gun.timers[1].ammo<=25"):
                 continue
         finally:
             page.mouse.up()
         page.keyboard.press("r")
-        if during_life("gun.timers[1].reloadRemaining>0"):
+        if wait_alive(page,deaths,"gun.timers[1].reloadRemaining>0"):
             assert any(cmd[2] or cmd[3] for _,cmd in page.evaluate("foundry.replay()")["runs"])
             return
     raise AssertionError("Three player lives ended during the repeater controls check")
@@ -293,11 +294,17 @@ def interactions(browser, url, out, exe):
       document.dispatchEvent(new Event('visibilitychange'));delete document.hidden; }""")
     assert state(page)["mode"] == "paused"
     enter(page)
-    page.keyboard.press("3")
-    wait(page, "foundry.inspect().weapons.find(w=>w.actor==='player').selected==='slag'")
-    page.wait_for_timeout(160)
-    page.keyboard.press("f")
-    wait(page, "foundry.inspect().weapons.find(w=>w.actor==='player').timers[2].ammo<4")
+    for _ in range(3):
+        wait(page,"foundry.inspect().actors.find(a=>a.id==='player').health>0")
+        deaths=actor(state(page))["deaths"]
+        page.keyboard.press("3")
+        if not wait_alive(page,deaths,"gun.selected==='slag' && !s.aim.switchRemaining && !gun.timers[2].cooldown"):
+            continue
+        page.keyboard.press("f")
+        if wait_alive(page,deaths,"gun.timers[2].ammo<4"):
+            break
+    else:
+        raise AssertionError("Three player lives ended during the launcher controls check")
     retained = []
     for _ in range(10):
         page.keyboard.press("p")

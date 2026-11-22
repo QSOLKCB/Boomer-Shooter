@@ -1,0 +1,26 @@
+{
+  "source": "bb9d2d41c829a9bfb2e8b9bdf5dc8d05ff717c66",
+  "server": "python -m http.server --bind 127.0.0.1",
+  "path": "/",
+  "browser": "151.0.7922.34",
+  "enteredWithOneClick": true,
+  "pausedTick": 66,
+  "pendingResumeTicks": 0,
+  "waitMs": 2000,
+  "unchanged": [
+    "actors",
+    "weapons",
+    "look",
+    "pitch",
+    "feed",
+    "projectiles",
+    "work"
+  ],
+  "nativeRetryResumed": true,
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  }
+}

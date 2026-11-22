@@ -1,0 +1,226 @@
+{
+  "environment": {
+    "runtimeSHA256": "cc1d47e2c4b1c70ade43e10dbb47297746e28b2973bd02f6842f89ba5037dfc2",
+    "runtimeMatchesHead": true,
+    "source": "bb9d2d41c829a9bfb2e8b9bdf5dc8d05ff717c66",
+    "engine": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+    "browser": "151.0.7922.34",
+    "binarySHA256": "e11fc9ce65c96313476f7ee9844b6fb6a9220fb048693cfe9eee00acf4170a9f",
+    "playwright": "1.62.0",
+    "os": "Linux",
+    "kernel": "6.18.57",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)",
+    "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+    "dpr": 1,
+    "viewport": [
+      1280,
+      760
+    ],
+    "drawingBuffer": [
+      1280,
+      760
+    ]
+  },
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  },
+  "firstFrag": [
+    {
+      "tick": 0,
+      "type": "death",
+      "source": "player",
+      "target": "kiln",
+      "weapon": "rivet",
+      "shot": 1
+    }
+  ],
+  "winner": {
+    "winner": "player",
+    "reason": "frag limit"
+  },
+  "controls": [
+    "movement and skill selection",
+    "keyboard move and jump",
+    "held right mouse and Q sights",
+    "pointer capture, relative aim, mouse firing, reload, unlock",
+    "scoreboard",
+    "blur with off-window release and fresh keydown",
+    "hidden document",
+    "rematch",
+    "WebGL context loss and restoration"
+  ],
+  "lifecycleInjection": [
+    "document hidden",
+    "pagehide"
+  ],
+  "restarts": [
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "explicit drag",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "explicit drag",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    },
+    {
+      "entry": "mouse capture",
+      "gpu": {
+        "buffers": 7,
+        "programs": 1
+      },
+      "raf": true,
+      "actors": 4,
+      "voices": 0,
+      "frags": 0
+    }
+  ],
+  "disposed": {
+    "gpu": {
+      "buffers": 0,
+      "programs": 0
+    },
+    "raf": false,
+    "audioVoices": 0
+  },
+  "fallbacks": {
+    "webgl": "WebGL is unavailable. Enable hardware acceleration or try another browser.",
+    "audio": "Match advanced with device construction rejected"
+  },
+  "captureGate": [
+    {
+      "route": "native retry",
+      "waitMs": 2000,
+      "waitingTicks": 0,
+      "health": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "acceptedCommands": 0,
+      "shotsOnEntry": 0,
+      "captured": true
+    },
+    {
+      "route": "explicit drag",
+      "waitMs": 2000,
+      "waitingTicks": 0,
+      "health": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "acceptedCommands": 0,
+      "shotsOnEntry": 0,
+      "captured": false
+    },
+    {
+      "route": "keyboard activation",
+      "captured": false
+    },
+    {
+      "route": "held join click",
+      "capturedBeforeRelease": true,
+      "waitingTicks": 0,
+      "phantomTurn": false,
+      "shotsOnEntry": 0
+    }
+  ]
+}

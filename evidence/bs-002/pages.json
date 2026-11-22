@@ -1,0 +1,22 @@
+{
+  "url": "https://qsolkcb.github.io/Boomer-Shooter/",
+  "source": "a7efda6bc4661e349af5166b646043be72a0fa96",
+  "browser": "151.0.7922.34",
+  "firstFrag": {
+    "tick": 0,
+    "type": "death",
+    "source": "player",
+    "target": "kiln",
+    "weapon": "rivet",
+    "shot": 1
+  },
+  "combatants": 4,
+  "checkedSingleClickCapture": false,
+  "offlineRematch": true,
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  }
+}
