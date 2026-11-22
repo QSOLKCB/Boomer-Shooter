@@ -27,6 +27,8 @@
           <label>Render scale <select id="scale"><option value="1">Native</option><option value=".7">70%</option></select></label>
           <label>Frag target <select id="limit"><option>10</option><option>5</option><option>15</option><option>1</option></select></label>
           <label>Time limit <select id="duration"><option value="18000">5 minutes</option><option value="10800">3 minutes</option><option value="3600">1 minute</option></select></label>
+          <button id="verify-file" type="button">Verify saved replay…</button>
+          <input id="replay-file" type="file" accept=".json,application/json" hidden>
         </div>
         <button id="save" class="link" hidden>Save command replay ↓</button>
         <p id="message" role="status"></p>

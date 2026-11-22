@@ -16,7 +16,7 @@ export async function receipt(match,arenaText) {
   return {...result,arena,state,events:history};
 }
 
-export async function verify(text,arenaText) {
+export async function verify(text,arenaText,checkpoint) {
   if(typeof text!=='string'||text.length>4000000) throw new RangeError('Replay size');
   const tape=fpsRecord(JSON.parse(text),['format','engine','seed','limit','duration','ticks','runs','arena','state','events']);
   if (![tape.arena,tape.state,tape.events].every(value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value)))
@@ -30,8 +30,11 @@ export async function verify(text,arenaText) {
     count+=entry[0]; if(count>tape.ticks) throw new RangeError('Extra commands'); checkCommand(entry[1]);
   }
   if(count!==tape.ticks) throw new RangeError('Incomplete tape');
-  for(const [repeat,command] of tape.runs) for(let i=0;i<repeat;i++) if(!m.step(command)) throw new Error('Command after match end');
+  for(const [repeat,command] of tape.runs) for(let i=0;i<repeat;i++) {
+    if(!m.step(command)) throw new Error('Command after match end');
+    if(checkpoint && m.tick%64===0) await checkpoint(m.tick,tape.ticks);
+  }
   const actual=await receipt(m,arenaText);
-  if(actual.state!==tape.state||actual.events!==tape.events||JSON.stringify(actual.runs)!==JSON.stringify(tape.runs)) throw new Error('Replay diverged');
+  if(actual.state!==tape.state||actual.events!==tape.events||JSON.stringify(actual.runs)!==JSON.stringify(tape.runs)) throw new Error('Replay hashes or accepted commands differ in this runtime.');
   return actual;
 }

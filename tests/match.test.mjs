@@ -55,7 +55,7 @@ test('isolated playback at 30, 60 and 120 Hz reproduces accepted commands, event
   const missing=structuredClone(expected);delete missing.seed;
   await assert.rejects(()=>verify(JSON.stringify(missing),text),/field/);
   const corrupt=structuredClone(expected);corrupt.runs[0][1][4]=0;
-  await assert.rejects(()=>verify(JSON.stringify(corrupt),text),/diverged/);
+  await assert.rejects(()=>verify(JSON.stringify(corrupt),text),/differ/);
   await assert.rejects(()=>verify(JSON.stringify({...expected,ticks:599}),text),/commands/);
 });
 

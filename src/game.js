@@ -1,7 +1,7 @@
 import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {DEFAULT_SEED,LABELS} from './sim/arena.js';
 import {MatchSlot,STEP} from './sim/match.js';
-import {receipt} from './sim/replay.js';
+import {receipt,verify} from './sim/replay.js';
 import {controls} from './input/controls.js';
 import {Scene} from './view/scene.js';
 import {Sound} from './view/audio.js';
@@ -13,11 +13,11 @@ export function start(arenaText) {
   let scene=new Scene(canvas,arena), match=slot.current, metrics=new Metrics();
   const clock=new FixedClock({step:STEP,maxFrame:.20,maxSteps:5}), sound=new Sound();
   const lifetime=new AbortController(), on=(target,name,fn)=>target.addEventListener(name,fn,{signal:lifetime.signal});
-  let mode='menu', previous=null, raf=0, disposed=false;
+  let mode='menu', previous=null, raf=0, disposed=false, verification=0;
   const input=controls(canvas,()=>mode==='playing'&&match.actor('player').health>0,()=>pause('Mouse released.'),()=>{el('capture-hint').textContent='Drag to aim · F fires · Esc pauses';});
   function render(alpha=1) {scene.draw(match,alpha,mode,Number(el('scale').value));}
   function setMode(value) {
-    mode=value;document.body.dataset.mode=value;
+    verification++;mode=value;document.body.dataset.mode=value;
     el('panel').hidden=value==='playing';el('hud').hidden=value!=='playing';el('board').hidden=true;
     el('settings').hidden=true;el('options').setAttribute('aria-expanded','false');document.body.classList.remove('settings-open');
     el('limit').disabled=el('duration').disabled=value==='paused';
@@ -84,6 +84,23 @@ export function start(arenaText) {
   on(el('save'),'click',async()=>{
     const data=await receipt(match,arenaText), a=document.createElement('a'), url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));
     a.href=url;a.download='foundry-pit-'+data.ticks+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  on(el('verify-file'),'click',()=>el('replay-file').click());
+  on(el('replay-file'),'change',async event=>{
+    const file=event.target.files[0];event.target.value='';
+    if(!file)return;
+    const request=++verification;
+    try {
+      if(file.size>4000000)throw new Error('Replay exceeds 4 MB.');
+      const checked=await verify(await file.text(),arenaText,async(tick,total)=>{
+        if(request!==verification || disposed)throw new Error('Cancelled');
+        el('message').textContent='Verifying '+tick+' / '+total+' ticks…';
+        await new Promise(resolve=>setTimeout(resolve,0));
+      });
+      if(request===verification)el('message').textContent='Verified '+checked.ticks+' ticks. State and event hashes match.';
+    } catch(error) {
+      if(request===verification)el('message').textContent='Replay check: '+error.message;
+    }
   });
   on(window,'keydown',e=>{
     if(mode!=='playing')return;

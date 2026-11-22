@@ -299,6 +299,9 @@ def reference(browser, url, out, exe):
     assert verification == tape
     dump(out / "reference-replay.json", tape)
     capture(page, out, "match-results")
+    page.locator("#options").click()
+    page.locator("#replay-file").set_input_files({"name":"match.json","mimeType":"application/json","buffer":json.dumps(tape).encode()})
+    wait(page, "t=>document.getElementById('message').textContent.startsWith('Verified '+t+' ticks')",arg=tape["ticks"],timeout=90000)
     page.locator("#action").click()
     wait(page, "foundry.inspect().tick>=8")
     assert all(a["kills"] == 0 for a in state(page)["actors"])

@@ -31,10 +31,10 @@ VANILLAJS **v3.2.0 — SEDIMENT & SIGNAL**, commit `7a3a5a3ec49aed5b7063a0561495
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/verify-replay.mjs evidence/bs-001/reference-replay.json
+node scripts/verify-replay.mjs evidence/bs-001/node-reference-replay.json
 ```
 
-Use **Save command replay** from pause or results to export your own run. The verifier replays the accepted commands from tick zero. Exact comparison is scoped to the same game source and JavaScript runtime.
+Use **Save command replay** from pause or results to export your run. In the same browser, open **Options → Verify saved replay** and select that JSON. The game independently re-executes the commands from tick zero and compares the state and event hashes. The CLI example uses the Node-generated fixture. Chromium and Node produced different hashes for the same reference commands in this study.
 
 The developer browser probe packages the runtime into a fresh nested directory, serves it on loopback, drives Chromium, captures screenshots and records raw timings. It uses Python Playwright for testing. With Playwright and a Chromium executable installed:
 
