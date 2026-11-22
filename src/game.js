@@ -14,13 +14,20 @@ export function start(arenaText) {
   const clock=new FixedClock({step:STEP,maxFrame:.20,maxSteps:5}), sound=new Sound();
   const lifetime=new AbortController(), on=(target,name,fn)=>target.addEventListener(name,fn,{signal:lifetime.signal});
   let mode='menu', previous=null, raf=0, disposed=false, verification=0;
-  const input=controls(canvas,()=>mode==='playing'&&match.actor('player').health>0,()=>pause('Mouse released.'),()=>{el('capture-hint').textContent='Drag to aim · F fires · Esc pauses';});
+  const livingInput=()=>mode==='playing'&&match.actor('player').health>0;
+  const input=controls(canvas,livingInput,()=>mode==='arming'||livingInput(),()=>{
+    if(mode==='arming') begin();
+  },()=>pause('Mouse released.'),()=>{
+    el('gate-message').textContent='Mouse capture is unavailable. The clock is stopped. Click here to retry, or play with drag or arrow keys.';
+    el('capture-hint').textContent='Drag to aim · F fires · Esc pauses';
+  });
   function render(alpha=1) {scene.draw(match,alpha,mode,Number(el('scale').value));}
   function setMode(value) {
     verification++;mode=value;document.body.dataset.mode=value;
-    el('panel').hidden=value==='playing';el('hud').hidden=value!=='playing';el('board').hidden=true;
+    el('panel').hidden=value==='playing'||value==='arming';el('entry-gate').hidden=value!=='arming';
+    el('hud').hidden=value!=='playing';el('board').hidden=true;
     el('settings').hidden=true;el('options').setAttribute('aria-expanded','false');document.body.classList.remove('settings-open');
-    el('limit').disabled=el('duration').disabled=value==='paused';
+    for (const id of ['limit','duration','movement','difficulty']) el(id).disabled=value==='paused';
     el('results').hidden=value!=='over';el('new').hidden=value!=='paused';
     el('menu-rules').hidden=value!=='menu';el('save').hidden=value!=='over'&&value!=='paused';
     el('damage').style.opacity='0';el('message').textContent='';
@@ -30,7 +37,7 @@ export function start(arenaText) {
     input.clear();sound.stop();
   }
   function pause(reason='Match paused.') {
-    if(mode!=='playing') return;
+    if(mode!=='playing' && mode!=='arming') return;
     setMode('paused');freeze();
     el('kicker').textContent='MATCH SUSPENDED';el('title').textContent='Paused.';
     el('intro').textContent=reason+' Your position, ammunition and match clock are held.';
@@ -55,25 +62,49 @@ export function start(arenaText) {
       metrics.ticks.add([match.tick,performance.now()-start]);
       if(match.result)clock.setPaused(true);
     });
-    render(result.alpha);updateHUD(match,input.locked);
+    render(result.alpha);updateHUD(match,input.locked,scene);
     metrics.frame(match.tick,interval,performance.now()-began,result.steps,result.dropped,scene.stats.drawCalls,scene.stats.submittedTriangles,
       match.state.projectiles.length,match.state.actors.filter(a=>a.health>0).length,match.work);
     if(match.result)finish();else raf=requestAnimationFrame(frame);
   }
-  function play(fresh) {
-    if(disposed || mode==='error')return;
+  function prepare(fresh) {
+    if(disposed || !['menu','paused','over'].includes(mode))return false;
     if(fresh) {
-      const candidate=slot.replace(arenaText,{limit:Number(el('limit').value),duration:Number(el('duration').value),seed:DEFAULT_SEED});
+      const candidate=slot.replace(arenaText,{limit:Number(el('limit').value),duration:Number(el('duration').value),seed:DEFAULT_SEED,
+        movement:el('movement').value,difficulty:el('difficulty').value});
       match=candidate;metrics=new Metrics();scene.reset();clock.reset();el('notice').textContent='';
     }
-    setMode('playing');clock.setPaused(false);previous=null;input.clear();
+    setMode('arming');clock.setPaused(true);previous=null;input.clear();input.useDrag(false);
+    el('gate-message').textContent='Waiting for mouse capture. The match clock is stopped.';
+    el('capture-hint').textContent='Arrow keys aim · F fires · Esc pauses';
+    render();
     if(el('sound').checked) sound.enable().then(ok=>{
-      if(!ok&&mode==='playing'&&!sound.enabled){el('capture-hint').textContent='Audio unavailable · click arena for mouse look · F fires';}
+      if(!ok&&mode==='playing'&&!sound.enabled){el('capture-hint').textContent='Audio unavailable · F fires · Esc pauses';}
     });
-    canvas.focus();updateHUD(match,false);raf=requestAnimationFrame(frame);
+    return true;
   }
-  on(el('action'),'click',()=>play(mode!=='paused'));
-  on(el('new'),'click',()=>play(true));
+  function begin() {
+    if(mode!=='arming'||disposed)return;
+    setMode('playing');clock.setPaused(false);previous=null;
+    if(!input.locked)canvas.focus();
+    updateHUD(match,input.locked,scene);raf=requestAnimationFrame(frame);
+  }
+  for(const button of [el('action'),el('new')]) {
+    const fresh=()=>button===el('new') || mode!=='paused';
+    on(button,'pointerdown',e=>{
+      if(e.button!==0 || !prepare(fresh()))return;
+      if(e.pointerType!=='mouse') begin();
+    });
+    // Native keyboard activation uses the arrow-key/F control scheme.
+    on(button,'click',e=>{if(e.detail===0 && prepare(fresh()))begin();});
+  }
+  on(el('free-look'),'pointerdown',e=>e.stopPropagation());
+  on(el('free-look'),'click',()=>{
+    if(mode!=='arming')return;
+    input.clear();input.useDrag(true);
+    el('capture-hint').textContent='Drag or arrow keys aim · F fires · Esc pauses';
+    begin();
+  });
   on(el('options'),'click',()=>{
     const opening=el('settings').hidden;el('settings').hidden=!opening;el('options').setAttribute('aria-expanded',String(opening));
     document.body.classList.toggle('settings-open',opening);
@@ -103,6 +134,7 @@ export function start(arenaText) {
     }
   });
   on(window,'keydown',e=>{
+    if(mode==='arming' && (e.code==='Escape'||e.code==='KeyP')){e.preventDefault();pause();return;}
     if(mode!=='playing')return;
     if(e.code==='Escape'||e.code==='KeyP'){e.preventDefault();pause();}
     if(e.code==='Tab'){e.preventDefault();el('board').hidden=false;scoreTable(el('board'),match.state.actors);}
@@ -127,8 +159,8 @@ export function start(arenaText) {
   window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();},{once:false});
   // Inspection returns detached data. Browser evidence uses normal controls for mutations.
   window.foundry=Object.freeze({
-    inspect:()=>structuredClone({mode,tick:match.tick,seed:match.seed,result:match.result,actors:match.state.actors,
-      weapons:match.state.weapons,look:match.units[0].body.yaw,pitch:match.units[0].body.pitch,projectiles:match.state.projectiles.length,
+    inspect:()=>structuredClone({mode,tick:match.tick,seed:match.seed,movement:match.movement,difficulty:match.difficulty,result:match.result,actors:match.state.actors,
+      weapons:match.state.weapons,look:match.units[0].body.yaw,pitch:match.units[0].body.pitch,aim:match.units[0].feel.presentation(),projectiles:match.state.projectiles.length,
       feed:match.feed,work:match.work,view:scene.stats,voices:sound.voices.size,audio:sound.enabled,
       captured:input.locked,rafPending:!!raf,disposed,profiles:match.units.slice(1).map(u=>[u.id,u.brain.mode,u.brain.target])}),
     metrics:()=>metrics.export(),replay:()=>receipt(match,arenaText)

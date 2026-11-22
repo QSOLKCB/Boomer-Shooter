@@ -36,7 +36,7 @@ function decide(match, unit, brain, eye) {
     if (sight(arena,eye,chest(actor.position))) { seen=actor; break; }
   }
   if (seen) {
-    if (brain.target !== seen.id) brain.ready=tick+arena.pack.settings.difficulty.normal.reaction+brain.index*3;
+    if (brain.target !== seen.id) brain.ready=tick+match.skill.reaction+brain.index*3;
     brain.last = [...seen.position]; brain.seenAt=tick;
   }
   brain.target = seen?.id ?? null;
@@ -44,8 +44,10 @@ function decide(match, unit, brain, eye) {
   const primary=match.loadout(unit.id).timers.find(t=>t.id===profile.weapon);
   if (!brain.supply || brain.supply.ready>tick || tick>=brain.supplyUntil) {
     brain.supply=null;
+    const needsAmmo=match.rulesVersion===1 ? primary.reserve===0 :
+      primary.reserve<Math.min(primary.magazineSize,match.weapons.find(w=>w.id===primary.id).reserve);
     const useful=match.pickups.filter(p=>p.ready<=tick && p.position[1]===0 &&
-      ((p.kind==='health' && endangered)||(p.kind==='armour' && self.armour<18)||(p.kind==='ammo' && primary.reserve===0)));
+      ((p.kind==='health' && endangered)||(p.kind==='armour' && self.armour<18)||(p.kind==='ammo' && needsAmmo)));
     useful.sort((a,b)=>flatDistance(position,a.position)-flatDistance(position,b.position));
     const pad=useful[0];
     if (pad && flatDistance(position,pad.position)<(seen?14:28)) {
@@ -75,7 +77,7 @@ function decide(match, unit, brain, eye) {
     brain.mode='patrol';
   }
   if (brain.goal && tick >= brain.routeAt) route(match,brain,position,brain.goal);
-  const error = arena.pack.settings.difficulty.normal.error;
+  const error = match.skill.error;
   brain.error=[(brain.random()-.5)*error*1.7,(brain.random()-.5)*error];
   if (tick%65 < 10) brain.side = brain.random()<.5 ? -1 : 1;
   brain.scan=tick+9;
@@ -86,7 +88,7 @@ function decide(match, unit, brain, eye) {
 export function botIntent(match, unit, eye) {
   const b=unit.brain, p=unit.body.position, profile=unit.profile, tick=match.tick;
   if (tick>=b.scan) decide(match,unit,b,eye);
-  let dx=0, dz=0, yaw=unit.body.yaw, pitch=0, fire=false;
+  let dx=0, dz=0, yaw=unit.body.yaw, pitch=0, fire=false, focus=false;
   const target = b.target && match.actor(b.target);
   const aim = b.last && chest(b.last);
   if (target?.health>0 && aim) {
@@ -94,6 +96,7 @@ export function botIntent(match, unit, eye) {
     yaw=Math.atan2(-ax,-az)+b.error[0];
     pitch=clamp(Math.atan2(aim[1]-eye[1],range)+b.error[1],-MAX_AIM_PITCH,MAX_AIM_PITCH);
     if (b.mode==='engage') {
+      focus=range>12;
       const ideal=profile.range*[.40,.62,.56][b.index], advance=range>ideal+2 ? .9 : range<ideal-2 ? -.55 : 0;
       const side=b.side*(b.index===2?.90:.54);
       dx=(ax*advance-az*side)/range; dz=(az*advance+ax*side)/range;
@@ -121,5 +124,6 @@ export function botIntent(match, unit, eye) {
   }
   const timer=timers[slot];
   return {yaw,pitch,move:[speed*(dx*c-dz*s)/n,speed*(dx*s+dz*c)/n], slot, press:fire, held:fire,
+    focus:focus && match.weapons[slot].archetype==='precision',
     reload:timer.ammo===0 || (b.mode==='cover' && timer.ammo<timer.magazineSize*.4)};
 }

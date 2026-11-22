@@ -1,6 +1,6 @@
 # Arena Shooter Roadmap
 
-**Engine baseline:** VANILLAJS `v3.2.0` at `7a3a5a3ec49aed5b7063a05614951e69bb257da6`. BS-000 was merged. BS-001 is playable and submitted for owner review. BS-002 through BS-006 remain open.
+**Engine baseline:** VANILLAJS `v3.2.0` at `7a3a5a3ec49aed5b7063a05614951e69bb257da6`. BS-001 merged in PR #2. PR #3 published the game on GitHub Pages. BS-002 is implemented for review. BS-003 is the next gameplay milestone.
 
 | Phase | Deliverable | Exit gate |
 | --- | --- | --- |
@@ -26,6 +26,17 @@
 - [x] Real packaged browser play-through, offline test and exact dependency/provenance manifest.
 
 The hosted [BS-001 evidence](evidence/bs-001/README.md) accompanies the slice. Owner play-through and a native 1080p GPU profile remain open.
+
+## BS-002 — Arcade movement and combat feel
+
+- [x] Selectable Arcade and Classic handling, buffered landing jumps, shared controller collision and repeatable strafe/jump trials.
+- [x] Single-click mouse entry, resume and rematch, with a frozen clock during pending capture and an explicit drag/keyboard fallback.
+- [x] Held sights, directional damage cues, positional shot audio and weapon-specific flashes and impacts.
+- [x] Three bounded difficulty presets, safer covered respawns, earlier health availability and resupply after actual reserve use.
+- [x] Versioned tuning in replay files, verification of archived BS-001 tapes, packaged browser input and software-rendered frame measurements.
+- [ ] Owner mouse-feel and audible-mix assessment, plus native GPU profiling.
+
+[Arcade tuning and verification](docs/BS_002.md)
 
 ## Stretch ideas, **not** BS-001 promises
 

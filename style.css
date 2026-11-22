@@ -306,6 +306,18 @@ body[data-mode=playing] .brand,body[data-mode=playing] #edition {
   display:none;
 }
 
+main:focus { outline:0; }
+#entry-gate {
+  position:absolute; inset:0; display:grid; place-items:center;
+  padding:20px; background:#09131266;
+}
+#entry-gate>div {
+  max-width:430px; background:#14201bf5; border:1px solid #657367;
+  border-left:3px solid var(--amber); padding:18px 22px;
+}
+#entry-gate h2 { margin:0; color:var(--amber); font:700 23px var(--sans); }
+#entry-gate p { margin:10px 0 16px; line-height:1.4; }
+
 #hud {
   pointer-events:none;
   text-shadow:0 1px 4px #000;
@@ -425,6 +437,23 @@ small {
   font:38px var(--mono);
   color:var(--amber);
   opacity:0;
+}
+
+#hitmark[data-kind=head] { color:#f3f7ff; }
+#hitmark[data-kind=frag] { color:#81eff5; font-size:44px; }
+#incoming {
+  position:absolute;
+  left:50%; top:50%;
+  width:74px; height:74px;
+  transform:translate(-50%,-50%) rotate(var(--bearing));
+}
+#incoming::before {
+  content:"";
+  position:absolute;
+  top:0; left:calc(50% - 9px);
+  width:18px; height:9px;
+  background:#ff8058;
+  clip-path:polygon(50% 0,100% 100%,50% 66%,0 100%);
 }
 
 #notice {
