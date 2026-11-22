@@ -52,6 +52,8 @@ test('isolated playback at 30, 60 and 120 Hz reproduces accepted commands, event
     const tape=await receipt(m,text);expected??=tape;assert.deepEqual(tape,expected);
   }
   assert.deepEqual(await verify(JSON.stringify(expected),text),expected);
+  const missing=structuredClone(expected);delete missing.seed;
+  await assert.rejects(()=>verify(JSON.stringify(missing),text),/field/);
   const corrupt=structuredClone(expected);corrupt.runs[0][1][4]=0;
   await assert.rejects(()=>verify(JSON.stringify(corrupt),text),/diverged/);
   await assert.rejects(()=>verify(JSON.stringify({...expected,ticks:599}),text),/commands/);
@@ -63,7 +65,7 @@ test('content and command rejection preserves the active match byte for byte',()
   const bad=[text.repeat(20),'{"__proto__":{}}',variant(parts=>parts.arsenal.weapons[0].damage=201),
     variant(parts=>parts.spawns.bots=Array(9).fill([0,0,0])),variant(parts=>parts.geometry.blocks[0].x=9999),
     variant((p,d)=>d.armourPads=['missing']),variant(p=>p.geometry.blocks[0].material='https://example.invalid'),
-    variant(parts=>parts.spawns.player=[-4,0,-4])];
+    variant(parts=>parts.settings.title='https://arena.invalid'),variant(parts=>parts.spawns.player=[-4,0,-4])];
   for(const source of bad){assert.throws(()=>slot.replace(source));assert.equal(slot.current,m);}
   let evaluated=false;
   const accessor={get pack(){evaluated=true;throw Error();}};assert.throws(()=>slot.replace(accessor));assert.equal(evaluated,false);

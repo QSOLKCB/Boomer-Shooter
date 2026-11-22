@@ -56,7 +56,8 @@ export function start(arenaText) {
       if(match.result)clock.setPaused(true);
     });
     render(result.alpha);updateHUD(match,input.locked);
-    metrics.frame(match.tick,interval,performance.now()-began,result.steps,result.dropped,scene.stats.drawCalls,scene.stats.submittedTriangles,match.state.projectiles.length);
+    metrics.frame(match.tick,interval,performance.now()-began,result.steps,result.dropped,scene.stats.drawCalls,scene.stats.submittedTriangles,
+      match.state.projectiles.length,match.state.actors.filter(a=>a.health>0).length,match.work);
     if(match.result)finish();else raf=requestAnimationFrame(frame);
   }
   function play(fresh) {

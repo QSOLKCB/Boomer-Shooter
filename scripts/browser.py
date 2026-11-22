@@ -1,5 +1,6 @@
 """Run actual Chromium input, packaging, lifecycle and P1 probes. No runtime dependencies."""
 import argparse
+import csv
 from collections import Counter
 from contextlib import contextmanager
 from functools import partial
@@ -70,7 +71,13 @@ def environment(page, browser, exe):
     }""")
     cpu = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                 if line.startswith("model name")), "undisclosed")
-    return dict(source=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+    tracked = ["index.html","style.css","content","src","vendor"]
+    files = sorted(p for name in tracked for p in ([ROOT/name] if (ROOT/name).is_file() else (ROOT/name).rglob("*")) if p.is_file())
+    runtime = hashlib.sha256()
+    for path in files:
+        runtime.update(path.relative_to(ROOT).as_posix().encode()+b"\0"+hashlib.sha256(path.read_bytes()).digest())
+    dirty = subprocess.check_output(["git","status","--porcelain","--",*tracked],cwd=ROOT)
+    return dict(runtimeSHA256=runtime.hexdigest(),runtimeMatchesHead=not dirty,source=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                 engine="7a3a5a3ec49aed5b7063a05614951e69bb257da6", browser=browser.version,
                 binarySHA256=hashlib.file_digest(open(exe, "rb"), "sha256").hexdigest() if exe else None,
                 playwright=version("playwright"), os=platform.system(), kernel=platform.release(), cpu=cpu, **info)
@@ -172,12 +179,19 @@ def interactions(browser, url, out, exe):
     page.keyboard.down("f")
     start_tick = state(page)["tick"]
     wait(page, "t=>foundry.inspect().tick>t+6", arg=start_tick)
-    # Headless Shell has no desktop window manager. Inject explicit blur/visibility
-    # events for these two cases; pointer lock, clicking, keys and tab are real browser input.
-    page.evaluate("window.dispatchEvent(new Event('blur'))")
+    # Move focus into an unrelated browsing context. Both releases must land
+    # there, so the original input adapter never receives their keyup events.
+    page.evaluate("""() => {
+      const other=document.createElement('iframe');other.id='focus-probe';other.style.cssText='position:fixed;width:2px;height:2px;right:0;bottom:0';
+      document.body.append(other);other.contentWindow.releases=[];other.contentWindow.addEventListener('keyup',e=>other.contentWindow.releases.push(e.code));
+      other.contentWindow.focus();
+    }""")
     wait(page, "foundry.inspect().mode==='paused'")
+    page.evaluate("document.getElementById('focus-probe').contentWindow.focus()")
     page.keyboard.up("d")
     page.keyboard.up("f")
+    assert page.evaluate("document.getElementById('focus-probe').contentWindow.releases") == ["KeyD", "KeyF"]
+    page.evaluate("document.getElementById('focus-probe').remove()")
     page.locator("#action").click()
     resumed = state(page)["tick"]
     wait(page, "t=>foundry.inspect().tick>t+26", arg=resumed)
@@ -248,7 +262,7 @@ def interactions(browser, url, out, exe):
     dump(out / "browser.json", dict(environment=meta, errors=errors, firstFrag=first["feed"], winner=first["result"],
         controls=["keyboard move and jump", "pointer capture, relative aim, mouse firing, reload, unlock",
                   "scoreboard", "blur with off-window release and fresh keydown", "hidden document", "rematch", "WebGL context loss and restoration"],
-        lifecycleInjection=["window blur", "document hidden", "pagehide"], restarts=retained, disposed=disposed, fallbacks=fallbacks))
+        lifecycleInjection=["document hidden", "pagehide"], restarts=retained, disposed=disposed, fallbacks=fallbacks))
 
 
 def quantiles(rows):
@@ -268,7 +282,11 @@ def reference(browser, url, out, exe):
     frames = [r for r in raw["frames"] if 120 < r[0] <= 720 and r[1] > 0]
     ticks = [r for r in raw["ticks"] if 120 < r[0] <= 720]
     assert len(ticks) == 600 and len(frames) > 50
-    dump(out / "p1-samples.json", dict(frameColumns=raw["frameColumns"], tickColumns=raw["tickColumns"], frames=frames, ticks=ticks))
+    for name, columns, rows in (("frames",raw["frameColumns"],frames),("ticks",raw["tickColumns"],ticks)):
+        with (out / f"p1-{name}.csv").open("w",newline="") as handle:
+            writer=csv.writer(handle,lineterminator="\n")
+            writer.writerow(columns)
+            writer.writerows(rows)
     # Finish the ordinary default match with no more player input or network.
     wait(page, "foundry.inspect().mode==='over'", timeout=420000)
     s = state(page)
@@ -293,7 +311,9 @@ def reference(browser, url, out, exe):
         maxStepsInFrame=max(r[3] for r in frames), droppedSeconds=sum(r[4] for r in frames),
         spikesOver33ms=sum(r[1]>33.34 for r in frames), drawCalls=dict(Counter(r[5] for r in frames)),
         submittedTriangles=[min(r[6] for r in frames),max(r[6] for r in frames)], peakProjectiles=max(r[7] for r in frames),
-        actors=4, entireMatchWork=s["work"], result=s["result"], endTick=s["tick"],
+        actors=4, livingActors=[min(r[8] for r in frames),max(r[8] for r in frames)],
+        sampleWork={raw["frameColumns"][col]:sum(r[col] for r in frames) for col in range(9,13)},
+        entireMatchWork=s["work"], result=s["result"], endTick=s["tick"],
         ranking=[{k:a[k] for k in ("id","kills","deaths")} for a in sorted(s["actors"],key=lambda a:(-a["kills"],a["deaths"],a["id"]))],
         browserReplayVerified=True, offlineRematch=True))
 

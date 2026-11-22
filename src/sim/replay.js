@@ -1,5 +1,6 @@
 import {ENGINE,readArena} from './arena.js';
 import {Match} from './match.js';
+import {fpsRecord} from '../../vendor/vanillajs/modules/combat3d/index.js';
 import {checkCommand} from './command.js';
 
 export async function sha(text) {
@@ -17,7 +18,9 @@ export async function receipt(match,arenaText) {
 
 export async function verify(text,arenaText) {
   if(typeof text!=='string'||text.length>4000000) throw new RangeError('Replay size');
-  const tape=JSON.parse(text);
+  const tape=fpsRecord(JSON.parse(text),['format','engine','seed','limit','duration','ticks','runs','arena','state','events']);
+  if (![tape.arena,tape.state,tape.events].every(value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value)))
+    throw new TypeError('Expected SHA-256 replay digests');
   if(tape.format!=='foundry-pit.replay.1'||tape.engine!==ENGINE||tape.arena!==await sha(arenaText)) throw new Error('Replay source mismatch');
   const m=new Match(readArena(arenaText),tape);
   if(!Number.isInteger(tape.ticks)||tape.ticks<0||tape.ticks>m.duration||!Array.isArray(tape.runs)||tape.runs.length>tape.ticks) throw new RangeError('Replay bounds');

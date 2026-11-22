@@ -12,6 +12,7 @@ export function readArena(text) {
     throw new RangeError('Arena must be a local JSON document within 32 KiB');
   const {pack: source, armourPads} = fpsRecord(JSON.parse(text), ['pack', 'armourPads']);
   const pack = validateFPSPack(source);
+  if (!/^[\p{L}\p{N}][\p{L}\p{N} .,'’–-]{0,47}$/u.test(pack.settings.title)) throw new TypeError('Plain arena title required');
   const plates = new Set(fpsList(armourPads, 8).map(fpsId));
   if (plates.size !== armourPads.length || [...plates].some(id => !pack.spawns.pickups.some(p => p.id === id && p.kind === 'ammo')))
     throw new RangeError('Armour pads require distinct admitted supply positions');
