@@ -15,7 +15,7 @@ def package(destination, revision=None):
     destination.mkdir(parents=True, exist_ok=True)
     if any(destination.iterdir()):
         raise ValueError("Select an empty output directory")
-    for name in ("index.html", "style.css", "LICENSE", "CREDITS.md"):
+    for name in ("index.html", "storm.html", "style.css", "LICENSE", "CREDITS.md"):
         shutil.copyfile(ROOT / name, destination / name)
     for name in ("src", "content", "vendor"):
         shutil.copytree(ROOT / name, destination / name)

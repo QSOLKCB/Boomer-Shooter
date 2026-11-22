@@ -14,14 +14,14 @@ const scores={
   reload:[['noise',360,0,.045,6500],['square',295,.052,.03,3300]]
 };
 export class Sound {
-  constructor() {this.ctx=null;this.bank=new Map();this.voices=new Set();this.enabled=false;this.generation=0;}
+  constructor(score=scores) {this.score=score;this.ctx=null;this.bank=new Map();this.voices=new Set();this.enabled=false;this.generation=0;}
   async enable() {
     const generation=++this.generation;
     try {
       this.ctx??=new AudioContext();
       await this.ctx.resume();
       if(generation!==this.generation) return false;
-      if(!this.bank.size) for(const [name,notes] of Object.entries(scores)) {
+      if(!this.bank.size) for(const [name,notes] of Object.entries(this.score)) {
         const frames=Math.ceil(Math.max(...notes.map(n=>n[2]+n[3]))*AUDIO2D_RATE)+2;
         const events=notes.map(([wave,frequency,at,len,gain],i)=>({wave,frequency,gain,id:i+1,channel:i,seed:309+i*73,
           sample:Math.round(at*AUDIO2D_RATE),duration:Math.round(len*AUDIO2D_RATE)}));

@@ -1,0 +1,46 @@
+{
+  "format": "storm-protocol/v1",
+  "seed": 1398034258,
+  "ticks": 633,
+  "runs": [
+    [
+      1,
+      [
+        0,
+        0,
+        0,
+        0,
+        38,
+        -1
+      ]
+    ],
+    [
+      632,
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        -1
+      ]
+    ]
+  ],
+  "state": {
+    "round": 5,
+    "age": 50,
+    "phase": 3,
+    "plan": {
+      "kind": 0,
+      "phase": 3,
+      "duration": 102,
+      "angle": 0,
+      "dial": 5.12517599295208,
+      "lane": -5
+    },
+    "hp": 40,
+    "boss": 0,
+    "result": "victory"
+  },
+  "digest": "ad9c88de"
+}

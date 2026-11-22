@@ -19,6 +19,10 @@ async function boot() {
   await Promise.all(files.map(async([path,hash])=>{
     if(await digest(await bytes(path))!==hash) throw new Error('Engine file differs from the receipt: '+path);
   }));
+  if(document.body.dataset.game==='storm'){
+    const {startStorm}=await import('./storm/game.js');
+    startStorm();return;
+  }
   const arenaText=new TextDecoder().decode(await bytes('content/foundry.json'));
   const {start}=await import('./game.js'); start(arenaText);
 }
@@ -26,5 +30,5 @@ boot().catch(error=>{
   document.body.dataset.mode='error';
   document.querySelector('#title').textContent='Arena offline';
   document.querySelector('#intro').textContent=error.message;
-  for(const id of ['action','options','menu-rules','control-guide']) document.getElementById(id).hidden=true;
+  for(const id of ['action','options','menu-rules','control-guide']) {const element=document.getElementById(id);if(element)element.hidden=true;}
 });

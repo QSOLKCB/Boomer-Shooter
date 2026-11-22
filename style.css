@@ -577,3 +577,6 @@ body[data-mode=over] h1,body[data-mode=paused] h1,body[data-mode=error] h1 {
     gap:6px;
   }
 }
+
+.storm-entry{display:inline-block;margin-top:.8rem;color:#ffce80;font:700 .82rem var(--mono)}
+body:not([data-mode="menu"]) .storm-entry{display:none}
