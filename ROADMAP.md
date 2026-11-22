@@ -38,9 +38,9 @@ The hosted [BS-001 evidence](evidence/bs-001/README.md) accompanies the slice. O
 
 [Arcade tuning and verification](docs/BS_002.md)
 
-## Parallel experimental proposal — BH-000 / STORM PROTOCOL
+## Parallel experiment — BH-000 / STORM PROTOCOL
 
-**Not started.** [BH-000 design](docs/BULLET_HELL_001.md) and [Work handoff](docs/BULLET_HELL_WORK_HANDOFF.md) describe an optional **first-person bullet-hell boss mode**. It does not replace the existing Deathmatch or reprioritize BS-003–BS-006 without owner approval. Proposed engineering stages: BH-001A (bounded authoritative hazard field), BH-001B (playable 3-phase boss arena), BH-002 (64/128/256/possible 512-hazard evidence), BH-003 (expanded patterns). All game-code changes require new reviewed PRs and a separate engine-integration decision.
+BH-001A implements the bounded reactor hazard field and replay authority. BH-001B adds the optional playable Cathedral Engine encounter, including three phases, five attacks and a packaged browser verification harness. See the [encounter guide](README.md#storm-protocol--cathedral-engine-boss-encounter) and [original design](docs/BULLET_HELL_001.md). BH-002 remains open for optimization and native GPU profiling. The 512-hazard configuration remains a stress goal. BH-003 covers expanded patterns and authoring.
 
 ## Stretch ideas, **not** BS-001 promises
 

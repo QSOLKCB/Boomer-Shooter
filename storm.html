@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10191f">
+<title>Storm Protocol · The Foundry Pit</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/storm/storm.css">
+</head><body data-game="storm" data-mode="menu"><main tabindex="-1">
+<canvas id="arena" tabindex="0" aria-label="Reactor court, first-person view"></canvas>
+<header><span class="insignia" aria-hidden="true">ϟ</span> FOUNDRY PIT <span class="divider">/</span> REACTOR COURT</header>
+<section id="panel" aria-labelledby="title"><div class="plate">
+<p class="eyebrow">BOSS ENCOUNTER</p><h1 id="title">Storm<br><em>Protocol</em></h1>
+<p id="intro">The Cathedral Engine is online. Break the amber core below its turbine. Strafe through the volleys and jump the low sweep.</p>
+<div class="buttons"><button id="action" disabled>Loading reactor</button><button id="new" hidden>Restart</button><button id="watch" hidden>Watch replay</button></div>
+<div id="options"><label><input id="sound" type="checkbox"> Reactor audio</label>
+<label>Render scale <select id="scale"><option value="1">Native</option><option value=".7">70%</option></select></label></div>
+<div class="links"><a href="./">Return to Deathmatch</a><button class="link" id="save" hidden>Save replay</button></div>
+</div><footer id="control-guide">WASD move · Mouse / arrows aim · Click / F fire · Space jump · P pause</footer></section>
+<section id="gate" hidden><div class="plate"><p class="eyebrow">MOUSE CAPTURE</p><h2>Stand by</h2><p id="gate-note" role="status">Waiting for mouse capture. The reactor clock is stopped.</p>
+<button id="fallback">Play without capture</button></div></section>
+<section id="hud" hidden aria-label="Encounter status">
+<div class="boss"><small id="phase"></small><strong>Cathedral Engine</strong><progress id="core" max="240" value="240" aria-label="Core health"></progress></div>
+<div id="reticle" aria-hidden="true"></div><div id="hit" aria-hidden="true" hidden>×</div>
+<div class="operator"><small>OPERATOR</small><b id="hp">100</b> HP</div>
+<div id="warning"><small id="charge"></small><strong id="pattern"></strong></div>
+<div class="weapon"><small>ARC DRIVER</small><b id="ammo">30</b> <span id="reserve"></span></div>
+</section><div id="injury" aria-hidden="true" hidden></div><noscript>This encounter requires JavaScript.</noscript>
+</main><script type="module" src="./src/boot.js"></script></body></html>

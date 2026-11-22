@@ -70,7 +70,7 @@ def environment(page, browser, exe):
     }""")
     cpu = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                 if line.startswith("model name")), "undisclosed")
-    tracked = ["index.html","style.css","content","src","vendor"]
+    tracked = ["index.html","storm.html","style.css","content","src","vendor"]
     files = sorted(p for name in tracked for p in ([ROOT/name] if (ROOT/name).is_file() else (ROOT/name).rglob("*")) if p.is_file())
     runtime = hashlib.sha256()
     for path in files:

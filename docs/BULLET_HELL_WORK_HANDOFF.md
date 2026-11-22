@@ -1,6 +1,6 @@
 # ChatGPT Work handoff — BH-001: STORM PROTOCOL
 
-**Status: implementation request template.** The bullet-hell game mode has not been built. This handoff is actionable **only after** owner acceptance of BH-000 and the existing planning PR's merge.
+**Historical implementation handoff from PR #6.** The [encounter guide](../README.md#storm-protocol--cathedral-engine-boss-encounter) describes the playable implementation.
 
 **Repository:** https://github.com/QSOLKCB/Boomer-Shooter  
 **Pinned engine:** VANILLAJS v3.2.0 at `7a3a5a3ec49aed5b7063a05614951e69bb257da6`.  

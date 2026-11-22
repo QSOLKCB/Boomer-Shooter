@@ -1,7 +1,7 @@
 # BH-000 — STORM PROTOCOL
 ## A first-person bullet-hell mode for The Foundry Pit
 
-**Status: design proposal only — not implemented.** BS-001/BS-002 deathmatch must remain unchanged until independently reviewed new-mode code passes its own tests. This proposal is for a separate `Bullet Hell` selection, not a silent change to Deathmatch rules or a claim that VANILLAJS presently supports hundreds of Combat3D projectiles.
+**Historical BH-000 proposal.** See the [encounter guide](../README.md#storm-protocol--cathedral-engine-boss-encounter) for the current implementation. BS-001/BS-002 deathmatch must remain unchanged until independently reviewed new-mode code passes its own tests. This proposal is for a separate `Bullet Hell` selection, not a silent change to Deathmatch rules or a claim that VANILLAJS presently supports hundreds of Combat3D projectiles.
 
 **Art direction:** one operator in a vast industrial reactor court. A towering original machine, **THE CATHEDRAL ENGINE**, throws luminous radial rings, alternating fans, slow spirals, moving walls and telegraphed laser sweeps through smoke, iron and neon. First-person perspective, open sightlines, clear floor markers and readable projectiles are non-negotiable. The earlier mood image is *inspiration*, not an actual in-game screenshot.
 

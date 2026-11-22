@@ -104,11 +104,23 @@ Those numbers describe **that measured hosted run only**. They are *not* native 
 
 The recorded BS-002 execution passed **28 consumer tests** on Node 24.22.3, verified browser replay in the producing Chromium environment, and exercised repeated match teardown. Manual mouse-feel/audio assessment, native GPU testing, other browser families and an eight-bot stress ladder remain open.
 
-## Experimental next game — STORM PROTOCOL (proposal)
+## Storm Protocol — Cathedral Engine boss encounter
 
-Imagine the foundry floor becoming a 3D bullet-hell arena: **one human versus a giant reactor boss**, threading real, damaging radial rings, spirals and sweeping walls of neon projectiles. The existing Deathmatch stays untouched.
+Choose **Storm Protocol · Boss encounter** from the Deathmatch menu, or open `storm.html` on the same local HTTP server. Break the illuminated square core below the turbine. The core changes colour as the machine enters its second and third phases. The operator has 100 HP and the reactor clock runs for five minutes.
 
-This is a **planning proposal, not a playable mode**. [Read the design and engineering limits](docs/BULLET_HELL_001.md) · [ChatGPT Work implementation handoff](docs/BULLET_HELL_WORK_HANDOFF.md). The engine's Combat3D combat pool remains capped at 64 live projectiles; higher-density patterns require a separately tested bounded authority and honest GPU measurements.
+| Attack | How to read it |
+| --- | --- |
+| Clockwork fan | The dotted floor line marks the sampled aim. Move sideways after the aim locks. |
+| Concentric rings | Look between the bright cyan heads for the gaps in successive rings. |
+| Rotating spiral | Follow an opening between the rotating violet streams. |
+| Split gate | Floor strips mark the opening in the next amber curtain. The second row shifts the opening. |
+| Forge sweep | Jump the low cyan wall as it approaches. |
+
+Use WASD / Shift to move, mouse or arrows to aim, Space to jump and left click or F to fire the Arc Driver. R reloads early. Holding fire on an empty magazine reloads automatically. P or Escape pauses. Mouse entry waits for capture. **Play without capture** enables drag or arrow-key aiming and F to fire. Reactor audio is opt-in.
+
+After victory or defeat, choose **Watch replay** for an immediate re-run of the accepted commands, **Save replay** for the versioned JSON, or **Restart encounter**. Deathmatch has its own launch, controls and replay format.
+
+[Design](docs/BULLET_HELL_001.md) · [Numerical verification](evidence/bh-001a/README.md)
 
 ## Documentation and next work
 
