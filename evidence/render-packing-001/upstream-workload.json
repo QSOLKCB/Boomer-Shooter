@@ -1,0 +1,111 @@
+{
+  "kind": "qsol.vanillajs.render-packing-workload.v1",
+  "node": "v24.22.3",
+  "platform": "linux",
+  "arch": "x64",
+  "protocol": {
+    "warmupPairs": 2,
+    "measuredPairs": 7,
+    "order": "alternating",
+    "timingGate": false,
+    "scope": "CPU geometry assembly and Float32 conversion only; not browser GC, GPU completion or FPS"
+  },
+  "rows": [
+    {
+      "boxes": 64,
+      "framesPerTrial": 80,
+      "verticesPerFrame": 2304,
+      "originalFloatValuesPerFrame": 13824,
+      "streamRetainedBytes": 55296,
+      "float32ByteParity": true,
+      "medianMs": {
+        "original": 58.529133,
+        "stream": 1.5949190000000044
+      },
+      "samplesMs": {
+        "original": [
+          47.90279800000002,
+          58.529133,
+          43.61555000000004,
+          136.93076700000006,
+          48.94154600000002,
+          72.09888000000001,
+          68.488471
+        ],
+        "stream": [
+          1.5949190000000044,
+          1.4555579999999964,
+          2.099909000000025,
+          2.458947999999964,
+          1.3475680000000239,
+          1.5112380000000485,
+          3.4239049999999907
+        ]
+      }
+    },
+    {
+      "boxes": 256,
+      "framesPerTrial": 80,
+      "verticesPerFrame": 9216,
+      "originalFloatValuesPerFrame": 55296,
+      "streamRetainedBytes": 221184,
+      "float32ByteParity": true,
+      "medianMs": {
+        "original": 221.82310899999993,
+        "stream": 7.284943999999996
+      },
+      "samplesMs": {
+        "original": [
+          221.82310899999993,
+          212.1115460000001,
+          213.327761,
+          212.13305500000024,
+          356.25848399999995,
+          487.41943900000024,
+          468.2728199999997
+        ],
+        "stream": [
+          5.943638999999621,
+          7.284943999999996,
+          6.0588559999996505,
+          5.681435999999849,
+          10.102394000000004,
+          9.29096699999991,
+          16.732606999999916
+        ]
+      }
+    },
+    {
+      "boxes": 512,
+      "framesPerTrial": 80,
+      "verticesPerFrame": 18432,
+      "originalFloatValuesPerFrame": 110592,
+      "streamRetainedBytes": 442368,
+      "float32ByteParity": true,
+      "medianMs": {
+        "original": 976.8591320000014,
+        "stream": 31.599286999999094
+      },
+      "samplesMs": {
+        "original": [
+          1181.3851179999992,
+          1040.3856099999994,
+          822.4050939999997,
+          907.1413639999992,
+          4254.840022999999,
+          976.8591320000014,
+          903.3325850000001
+        ],
+        "stream": [
+          24.794110000000728,
+          31.599286999999094,
+          25.285673999998835,
+          31.701696000000084,
+          57.456787000000986,
+          45.40519799999856,
+          23.315612999998848
+        ]
+      }
+    }
+  ]
+}

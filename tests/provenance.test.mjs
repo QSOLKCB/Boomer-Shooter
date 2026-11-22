@@ -30,3 +30,14 @@ test('every upstream byte and transitive import is receipted; consumer derivativ
   assert.equal(hash(derived),approved);
   assert(bytes('../../src/boot.js').toString().includes(hash(bytes('manifest.json'))));
 });
+
+test('Storm verifies the independently pinned import-free geometry writer before startup',()=>{
+  const source=bytes('../render-packing/index.js'), manifest=bytes('../render-packing/manifest.json');
+  const receipt=JSON.parse(manifest);
+  assert.equal(receipt.commit,'a2bc2dbbb2e2a28fb8857eb7916f1bb374d3c85c');
+  assert.equal(receipt.sha256,'c42239a5be626feb53f11243dddaa034821daaa7ca667741495420dca8558733');
+  assert.equal(hash(source),receipt.sha256);
+  assert.deepEqual(receipt.dependencies,[]);
+  assert.doesNotMatch(source.toString(),/^\s*(?:import|export\s+.*?\s+from)\b/m);
+  assert(bytes('../../src/boot.js').toString().includes(hash(manifest)));
+});

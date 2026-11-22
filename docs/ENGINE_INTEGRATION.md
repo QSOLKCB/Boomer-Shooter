@@ -51,3 +51,16 @@ Actors share the controller and weapon rules. The three bot profiles vary prefer
 A respawn skips physically occupied starts and maximizes nearest-rival distance minus seven metres per visible rival. Stable start order resolves ties. Each actor waits 108 ticks and uses the same rules. If every start is occupied the next tick retries. Each rematch uses the same initial seed for comparability.
 
 Presentation interpolates actor positions between accepted ticks and snaps across deaths/respawns. Effects read Combat3D events. The clock accepts at most five updates per callback and discards excess wall-time debt. A pause releases input and clears the accumulator. Rematches reuse one static scene and audio bank. The optional audio path is capped at twelve active sources. Samples cover the most recent 4,096 frames and 8,192 ticks.
+
+## Storm Protocol geometry stream
+
+The boss renderer adds the import-free `modules/render-packing/index.js` from VANILLAJS merge commit `a2bc2dbbb2e2a28fb8857eb7916f1bb374d3c85c` (PR #151). This is an independent commit pin for that one optional module. The v3.2.0 gameplay closure, its armour exception and both replay formats retain their original identities. The Storm entry verifies the secondary manifest and module bytes before importing the scene. [Source receipt](../vendor/render-packing/manifest.json)
+
+To reproduce the copy with a local upstream checkout containing the merge object, run from the game repository:
+
+```sh
+git -C "$VANILLAJS_CHECKOUT" show a2bc2dbbb2e2a28fb8857eb7916f1bb374d3c85c:modules/render-packing/index.js > vendor/render-packing/index.js
+node --test tests/provenance.test.mjs
+```
+
+A 22-box stream packs the core, grilles and floor telegraphs. The mixed triangle mesh keeps the original vertex order in one bounded upload. Bullet heads use the upstream unit-box topology and cache their emissive face colours by source kind. Every draw updates positions from the authoritative interpolated hazard shapes. Empty, shrinking and reused slots submit only the live prefix. The runtime creates no additional GPU mesh or draw call.
