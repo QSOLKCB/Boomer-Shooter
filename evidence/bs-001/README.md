@@ -1,5 +1,20 @@
 # The Foundry Pit — BS-001 verification
 
+## PR #2 review verification
+
+At game commit `c19da734495b5b10af6ff02fbf2e42ea4afec070`, Node v24.22.3 and Chrome Headless Shell 151.0.7922.34 completed two pursuits that had thrown from `WeaponFeel.setAim` on `c8f9559a56fbdd4fe915b2bc579b5b258c6cfd5e`. Both used the default arena, seed and match rules. The operator walked toward the nearest living rival each tick. [Chromium observations and replay digests](review/aim.json)
+
+| Operator input | Completed ticks before the old exception | First accepted clamped aim | Match finish |
+| --- | ---: | --- | --- |
+| Walk | 1,677 | Tick 1,678, Kiln looking down at Flux | Flux won at tick 2,981 |
+| Walk and jump every 42 ticks | 2,784 | Tick 2,785, Kiln looking up at the operator | Flux won at tick 4,967 |
+
+All 19 consumer tests passed, including a full bot leaving an active armour plate for a player at 90. The plate granted ten points and entered cooldown once. Vendoring reproduced the approved armour class and the original v3.2.0 manifest byte for byte. Adding a comment to a temporary copy of the method caused the generator to reject it before writing output. [Test output](review/tests.log) · [Owner-approved scope and hashes](../../docs/ENGINE_INTEGRATION.md#armour-pickup)
+
+The complete packaged Chromium suite passed on the software renderer. The controlled 4,220-tick reference reproduced the archived replay file byte for byte. In a separate keyboard-and-mouse match the operator scored the opening frag, 14 eliminations occurred between CPU rivals, and Kiln won at tick 4,818. The in-game verifier accepted the recorded commands and the offline rematch cleared the scores. [Browser and match record](review/played-match.json) · [Frag ledger](review/frag-ledger.json) · [Importable keyboard replay](review/played-replay.json)
+
+## Original vertical slice
+
 The default-rules Chromium play-through recorded one operator frag and **ten CPU-versus-CPU eliminations**. At combat tick **844**, Kiln eliminated Vise with Arc Repeater shot 24. Kiln reached ten frags at tick **4,884**. Chromium re-executed the recorded commands, matched the full event and state hashes, and started another match while offline. [Match record](played-match.json) · [Accepted commands](played-replay.json) · [All 18 death events](frag-ledger.json)
 
 ![The casting floor seen from the operator's first-person camera](arena-gameplay.jpg)
