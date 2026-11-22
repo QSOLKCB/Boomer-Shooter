@@ -35,4 +35,4 @@ Preserve an uncomplicated low-graphics profile; aggressive culling must be conse
 
 ## Future reports
 
-Store measured results under `evidence/` (with source commit and test inputs) when they exist. No synthetic 'benchmark passes', invented GPU readings, hard-coded victory chart or unverified performance badges are allowed. Current status: **no game benchmark executed**.
+Store measured results under `evidence/` (with source commit and test inputs) when they exist. No synthetic 'benchmark passes', invented GPU readings, hard-coded victory chart or unverified performance badges are allowed. The [first P1 run](../evidence/bs-001/README.md) includes source revisions, raw frame/step samples and a replay. Physical GPU timings remain open.

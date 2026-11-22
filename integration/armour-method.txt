@@ -1,0 +1,10 @@
+  // BS-001 consumer extension. All damage and respawn behaviour remains engine-owned.
+  pickupArmour(id, amount) {
+    fpsNumber(amount, 1, 100, true);
+    const actor = this.#actors.get(id);
+    if (!actor) throw new RangeError('unknown actor');
+    if (actor.health === 0) return 0;
+    const restored = Math.min(amount, Math.max(0, 100 - actor.armour));
+    actor.armour += restored;
+    return restored;
+  }

@@ -1,47 +1,52 @@
-# BOOMER-SHOOTER
+# BOOMER-SHOOTER — The Foundry Pit
 
-**One human. A pit full of CPU opponents. No excuses.**
+A fast, offline industrial arena FPS for one human and three CPU rivals. Kiln closes with the Arc Repeater, Vise peeks from cover with a Rivet Rifle, and Flux patrols with a travelling Slag Launcher. Every combatant can win. First to **10 frags** or the best score at **five minutes** takes the pit.
 
-An original, high-speed, offline-first arena FPS powered by [VANILLAJS v3.2.0](https://github.com/QSOLKCB/VANILLAJS/releases/tag/v3.2.0). Built to be fun to play **and** to push the VANILLAJS engine with reproducible benchmarks rather than invented performance claims.
+## Play locally
 
-> **Status: pre-production.** This repository currently specifies the game and implementation contracts. The playable runtime is not implemented yet.
+Clone this repository, open a terminal in its root, and run:
 
-## The pitch — THE FOUNDRY PIT (working title)
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1
+```
 
-Enter a brutal industrial science-fiction arena. One human player fights CPU-controlled combatants in an old-school free-for-all deathmatch. Bots may target and kill **each other** as well as the human. Fast strafing, deliberate jumps, weapon switching, cover, elevated routes, health/armour/ammo pickups and satisfying respawns determine who reaches the frag limit first. Original characters, geometry, effects, audio and names only; no borrowed franchise assets.
+Open **http://127.0.0.1:8000/** in Chromium and select **Enter the pit**. Click the arena to capture the mouse. Use **Options** before a match to set the frag target, time limit, mouse sensitivity, invert Y, render scale and sound. Sound starts muted. The full directory also runs under an HTTP subpath. Internet access is unnecessary once cloned. Keep the local server running for cold starts and reloads.
 
-**First playable:** one complete arena, one human versus **three bots**, three genuinely distinct weapons, configurable match length/frag target, real line-of-sight combat, bot-versus-bot damage, health/armour/ammo pickups, deaths/respawns, scoreboard, match end and rematch. Extend to **1–8 CPU bots** only once the pinned engine's pack/actor budgets and browser performance have been verified. No campaign, keys, doors or story progression in the first phase.
-
-**Design goals:** speed, readability, enemy variety, short replayable matches, immediate restart, zero online service requirements and clear performance evidence at increasing simulated load.
-
-## Engine provenance
-
-| Item | Pin / responsibility |
+| Control | Action |
 | --- | --- |
-| VANILLAJS | Release **v3.2.0 — SEDIMENT & SIGNAL** |
-| Exact engine commit | `7a3a5a3ec49aed5b7063a05614951e69bb257da6` |
-| Engine module metadata | [pinned MODULES.json](https://github.com/QSOLKCB/VANILLAJS/blob/7a3a5a3ec49aed5b7063a05614951e69bb257da6/MODULES.json) — experimental public APIs |
-| OPT | [QSOLKCB/OPT](https://github.com/QSOLKCB/OPT), optional profiling methodology, **not** a runtime dependency |
-| License | Apache-2.0; retain upstream LICENSE/NOTICE when vendoring |
+| WASD / Shift | Move, strafe / sprint |
+| Mouse / arrow keys | Aim. Drag to look if pointer capture is unavailable |
+| Left click / F | Fire. Tap the rifle or launcher, hold the repeater |
+| Space / R | Jump / reload the selected weapon |
+| 1 / 2 / 3 | Rivet Rifle / Arc Repeater / Slag Launcher |
+| Tab | Hold for the live scoreboard |
+| P / Escape | Pause and release the mouse |
+| Rematch | Start a fresh match with the selected rules |
 
-Pin the *smallest verified transitive closure* of public engine modules into this game's repository. Do not load code from mutable GitHub branches, public CDNs or demos at runtime. Do not change the engine pin silently.
+The green cross restores health. Cyan plates restore armour, and amber rounds replenish reserves. Look for the large plate on the west gantry or contest the casting circle on the floor. Slag splash can hurt its owner. Self-eliminations earn zero frags. Ties resolve by fewer deaths, then stable combatant ID.
 
-## Start here
+## Engine and verification
 
-- [AGENTS.md](AGENTS.md) — mandatory rules for ChatGPT Work and implementation agents
-- [Work handoff](docs/WORK_HANDOFF.md) — ready-to-use Work assignment for the first runnable PR
-- [ROADMAP.md](ROADMAP.md) — milestones and owner review gates
-- [Arena game design](docs/GAME_DESIGN.md) — rules, combat loop, bots, content and scope
-- [Architecture](docs/ARCHITECTURE.md) — engine boundaries, fixed-tick combat and lifecycle
-- [Engine audit](docs/ENGINE_BASELINE.md) — actual v3.2.0 primitives, capacities and limitations
-- [Acceptance](docs/ACCEPTANCE.md) — required real play-throughs and regression coverage
-- [Performance](docs/PERFORMANCE.md) — benchmark ladder, measurement protocol and honesty rules
-- [Provenance](docs/PROVENANCE.md) — licenses, asset rules and pinned source receipts
+VANILLAJS **v3.2.0 — SEDIMENT & SIGNAL**, commit `7a3a5a3ec49aed5b7063a05614951e69bb257da6`, owns movement, weapon handling, combat, collision, navigation primitives and rendering. The browser checks the vendoring receipt at startup. The consumer armour extension and its regression are documented in the [engine integration notes](docs/ENGINE_INTEGRATION.md).
 
-## Local execution (after implementation)
+```sh
+node --test tests/*.test.mjs
+node scripts/verify-replay.mjs evidence/bs-001/node-reference-replay.json
+```
 
-The first implementation PR must document and verify an ordinary local HTTP workflow (for example, `python3 -m http.server 8000 --bind 127.0.0.1`). Native ES modules served from a real HTTP origin are required; `file://` is not a supported gameplay launch method. The current planning-only tree has **no executable game, test suite or claimed performance result**.
+Use **Save command replay** from pause or results to export your run. In the same browser, open **Options → Verify saved replay** and select that JSON. The game independently re-executes the commands from tick zero and compares the state and event hashes. The CLI example uses the Node-generated fixture. Chromium and Node produced different hashes for the same reference commands in this study.
 
-## Working policy
+The developer browser probe packages the runtime into a fresh nested directory, serves it on loopback, drives Chromium, captures screenshots and records raw timings. It uses Python Playwright for testing. With Playwright and a Chromium executable installed:
 
-Each substantive phase is a reviewable PR. ChatGPT Work may implement and test but must not merge, tag, publish, deploy or alter upstream repositories without explicit owner authorization. **Correctness outranks speed.**
+```sh
+python3 scripts/browser.py --chromium /path/to/chromium --out /tmp/foundry-evidence
+```
+
+The [BS-001 evidence](evidence/bs-001/README.md) includes the packaged browser run, screenshots, replay, frame samples and hardware limitations.
+
+## Project documents
+
+- [AGENTS.md](AGENTS.md) and [original Work handoff](docs/WORK_HANDOFF.md)
+- [Roadmap](ROADMAP.md), [game design](docs/GAME_DESIGN.md) and [architecture](docs/ARCHITECTURE.md)
+- [Engine baseline](docs/ENGINE_BASELINE.md), [integration notes](docs/ENGINE_INTEGRATION.md) and [vendoring manifest](vendor/vanillajs/manifest.json)
+- [Acceptance](docs/ACCEPTANCE.md), [performance programme](docs/PERFORMANCE.md), [provenance](docs/PROVENANCE.md) and [credits](CREDITS.md)

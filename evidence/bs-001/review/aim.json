@@ -1,0 +1,79 @@
+{
+  "testFile": "tests/match.test.mjs",
+  "seed": 1179603527,
+  "arenaSHA256": "1e128a8294787ed975b27a93a9a749413f9acf8c1753d246b76a4ea62c16740a",
+  "before": {
+    "source": "c8f9559a56fbdd4fe915b2bc579b5b258c6cfd5e",
+    "chromium": "151.0.7922.34",
+    "results": [
+      {
+        "jumping": false,
+        "tick": 1677,
+        "name": "RangeError",
+        "message": "number out of bounds",
+        "setAim": true
+      },
+      {
+        "jumping": true,
+        "tick": 2784,
+        "name": "RangeError",
+        "message": "number out of bounds",
+        "setAim": true
+      }
+    ],
+    "errors": {
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "httpErrors": []
+    }
+  },
+  "after": {
+    "source": "c19da734495b5b10af6ff02fbf2e42ea4afec070",
+    "chromium": "151.0.7922.34",
+    "results": [
+      {
+        "jumping": false,
+        "first": {
+          "acceptedTicks": 1678,
+          "bot": "kiln",
+          "target": "flux",
+          "pitch": -1.5607963267948965
+        },
+        "end": 2981,
+        "winner": {
+          "winner": "flux",
+          "reason": "frag limit"
+        },
+        "verified": true,
+        "seed": 1179603527,
+        "state": "e87c15c0fcac45d9bb7335a982cf7d44749234f4165273deecbaf91d2a23fa16",
+        "events": "6ab58723610c5528511b60e941784f075a5836b9f3190ea31c093a214591ac88"
+      },
+      {
+        "jumping": true,
+        "first": {
+          "acceptedTicks": 2785,
+          "bot": "kiln",
+          "target": "player",
+          "pitch": 1.5607963267948965
+        },
+        "end": 4967,
+        "winner": {
+          "winner": "flux",
+          "reason": "frag limit"
+        },
+        "verified": true,
+        "seed": 1179603527,
+        "state": "f24d3005daa3f85a994fa4947a5fe553f5544c9e620925a14bc31c60488d72a0",
+        "events": "87dba1263620bf4719c978cf50505001f7a63a015f78acc9dfae72dc7ac578b1"
+      }
+    ],
+    "errors": {
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "httpErrors": []
+    }
+  }
+}

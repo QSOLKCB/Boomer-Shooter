@@ -1,0 +1,76 @@
+{
+  "environment": {
+    "runtimeSHA256": "3fccc06dd509ba684b6e5570255a491a9799eefe29af50719d1e3c8b6f5f7aba",
+    "runtimeMatchesHead": true,
+    "source": "c19da734495b5b10af6ff02fbf2e42ea4afec070",
+    "engine": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+    "browser": "151.0.7922.34",
+    "binarySHA256": "e11fc9ce65c96313476f7ee9844b6fb6a9220fb048693cfe9eee00acf4170a9f",
+    "playwright": "1.62.0",
+    "os": "Linux",
+    "kernel": "6.18.57",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)",
+    "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+    "dpr": 1,
+    "viewport": [
+      1280,
+      760
+    ],
+    "drawingBuffer": [
+      1280,
+      760
+    ]
+  },
+  "openingFrag": {
+    "tick": 0,
+    "type": "death",
+    "source": "player",
+    "target": "kiln",
+    "weapon": "rivet",
+    "shot": 1
+  },
+  "result": {
+    "winner": "kiln",
+    "reason": "frag limit"
+  },
+  "endTick": 4818,
+  "rules": {
+    "fragLimit": 10,
+    "durationTicks": 18000
+  },
+  "cpuVersusCpuFragsAtLeast": 14,
+  "scores": [
+    {
+      "id": "flux",
+      "kills": 4,
+      "deaths": 7
+    },
+    {
+      "id": "kiln",
+      "kills": 10,
+      "deaths": 6
+    },
+    {
+      "id": "player",
+      "kills": 1,
+      "deaths": 7
+    },
+    {
+      "id": "vise",
+      "kills": 7,
+      "deaths": 2
+    }
+  ],
+  "state": "94e65bcebf8b951784fc4e5865ba14483f1e1997b3c43e307969b367b94329dd",
+  "events": "700399cb26f4ec0019a6424e494e0630d056d82dce6c9b3b31db9ea1f9611250",
+  "browserReplayVerified": true,
+  "offlineRematch": true,
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  }
+}

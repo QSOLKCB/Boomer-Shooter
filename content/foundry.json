@@ -1,0 +1,48 @@
+{
+  "armourPads": ["plate-press", "high-plate"],
+  "pack": {
+    "kind": "qsol.vanillajs.mod-pack.v1", "id": "the-foundry-pit", "version": "1.0.0", "requires": [],
+    "entries": [
+      {"id":"settings","kind":"data","data":{
+        "kind":"qsol.vanillajs.fps-arena.v1","title":"The Foundry Pit","size":36,
+        "palette":{"floor":[0.24,0.28,0.29],"wall":[0.26,0.31,0.32],"accent":[0.52,0.29,0.17],"cover":[0.29,0.36,0.36],"enemy":[1,0.33,0.13]},
+        "rules":{"durationTicks":18000,"scoreLimit":10,"respawnTicks":108,"waveGap":120,"friendlyFire":false,"selfDamage":true,"playerHealth":100,"playerArmour":25},
+        "difficulty":{"easy":{"reaction":42,"error":0.08},"normal":{"reaction":23,"error":0.032},"hard":{"reaction":10,"error":0.015}}
+      }},
+      {"id":"geometry","kind":"data","data":{
+        "blocks":[
+          {"id":"press-a","x":-5,"y":0,"z":-5,"w":3,"d":4,"h":3.5,"color":"accent","material":"stone"},
+          {"id":"press-b","x":3,"y":0,"z":3,"w":3,"d":4,"h":3.5,"color":"accent","material":"stone"},
+          {"id":"quench","x":-11,"y":0,"z":3,"w":4,"d":2,"h":2,"color":"cover","material":"stone"},
+          {"id":"mould","x":7,"y":0,"z":-8,"w":3,"d":4,"h":2.25,"color":"cover","material":"stone"},
+          {"id":"low-die","x":-2,"y":0,"z":-11,"w":4,"d":2,"h":1,"color":"cover","material":"stone"},
+          {"id":"gantry","x":-17,"y":0,"z":-12,"w":4,"d":8,"h":1.5,"color":"cover","material":"stone"},
+          {"id":"south-crate","x":-9,"y":0,"z":10,"w":3,"d":3,"h":1.75,"color":"cover","material":"stone"}
+        ],
+        "ramps":[{"id":"gantry-stairs","x":-17,"y":0,"z":-4,"w":4,"d":5,"h":1.5,"direction":-1,"color":"cover"}]
+      }},
+      {"id":"spawns","kind":"data","data":{
+        "player":[0,0,14],"bots":[[0,0,-6],[-9,0,-7],[11,0,8],[-12,0,14],[13,0,-13],[-11,0,-14],[15,0,0]],
+        "pickups":[
+          {"id":"plate-press","position":[0,0,2],"kind":"ammo","amount":35},
+          {"id":"high-plate","position":[-15,1.5,-9],"kind":"ammo","amount":60},
+          {"id":"trauma-east","position":[14,0,-4],"kind":"health","amount":40},
+          {"id":"trauma-west","position":[-12,0,7],"kind":"health","amount":40},
+          {"id":"rounds-south","position":[2,0,11],"kind":"ammo","amount":18},
+          {"id":"rounds-north","position":[-6,0,-13],"kind":"ammo","amount":18}
+        ]
+      }},
+      {"id":"arsenal","kind":"data","data":{"weapons":[
+        {"id":"rivet","archetype":"precision","damage":68,"headMultiplier":2.2,"range":72,"falloff":0.87,"spread":0.001,"recoil":0.078,"interval":0.46,"reload":1.05,"magazine":6,"reserve":36,"speed":28,"radius":0,"penetration":0},
+        {"id":"arc","archetype":"automatic","damage":19,"headMultiplier":1.45,"range":53,"falloff":0.72,"spread":0.005,"recoil":0.027,"interval":0.10,"reload":1.3,"magazine":28,"reserve":112,"speed":30,"radius":0,"penetration":0},
+        {"id":"slag","archetype":"projectile","damage":135,"headMultiplier":1,"range":62,"falloff":1,"spread":0.002,"recoil":0.115,"interval":0.8,"reload":1.65,"magazine":4,"reserve":16,"speed":24,"radius":4.25,"penetration":0}
+      ]}},
+      {"id":"bots","kind":"data","data":{"types":[
+        {"id":"kiln","health":100,"armour":25,"speed":5.8,"range":21,"cadence":9,"weapon":"arc","color":[1,0.36,0.12]},
+        {"id":"vise","health":100,"armour":25,"speed":4.8,"range":38,"cadence":40,"weapon":"rivet","color":[0.18,0.94,0.94]},
+        {"id":"flux","health":100,"armour":25,"speed":5.4,"range":29,"cadence":54,"weapon":"slag","color":[0.94,0.43,0.92]}
+      ]}},
+      {"id":"waves","kind":"data","data":{"rosters":[["kiln","vise","flux"]]}}
+    ]
+  }
+}

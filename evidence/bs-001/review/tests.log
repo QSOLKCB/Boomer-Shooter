@@ -1,0 +1,27 @@
+✔ engine limitation and consumer armour parity: a real armour pickup absorbs damage on the same actor (10.537802ms)
+✔ stone stops hitscan and travelling splash; unoccluded projectile travels before damaging a rival (7.569026ms)
+✔ simultaneous real shots produce both eliminations before the match ranks the tick (1.480542ms)
+✔ precision needs an edge, repeater sustains, timers survive switching, reload consumes reserve (114.534311ms)
+✔ 16 actors and 64 active rounds are hard caps; rejected rounds consume ammo, expiry releases slots (791.544469ms)
+✔ a cardinal quaternion one ULP outside the Combat3D interval is admitted without changing its ray (2.895455ms)
+✔ pursuing the nearest rival reaches the lower bot pitch bound and finishes the match (1443.238409ms)
+✔ pursuing the nearest rival reaches the upper bot pitch bound and finishes the match (2350.226659ms)
+✔ human fires a real rivet frag, bots eliminate one another and the operator; default match ends with consistent accounts (3261.369556ms)
+✔ isolated playback at 30, 60 and 120 Hz reproduces accepted commands, event and state digests (1798.844538ms)
+✔ content and command rejection preserves the active match byte for byte (13.930475ms)
+✔ real movement hits the wall, clears a staircase and jumps without tunnelling (25.693643ms)
+✔ respawns avoid occupied volumes and choose the best admitted cover/distance score deterministically (2.705712ms)
+✔ timed pads award a single eligible claimant, cap armour and preserve frags after recasting (62.490702ms)
+✔ ties use fewer deaths then code-unit actor ID; a simultaneous limit wins over the time limit (0.379776ms)
+✔ bounded clock drops long gaps and resets debt across pause and resume (0.422517ms)
+✔ simultaneous nearby pad claim goes to the first eligible living actor in engine ID order (5.802684ms)
+✔ a full bot leaves the plate available for a player who can use ten points (10.07884ms)
+✔ every upstream byte and transitive import is receipted; consumer derivative is reproducible (7.800541ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9177.537978

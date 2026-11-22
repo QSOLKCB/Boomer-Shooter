@@ -8,7 +8,7 @@
 4. **Physical-device evidence:** owner's manual mouse/keyboard gameplay and native GPU frame profile, separate from hosted/software browser.
 5. **Owner sign-off:** review, merge and release decision separate from preceding evidence.
 
-A green Node test is not browser visual evidence. Headless SwiftShader is not a physical RTX benchmark. There are no executed game tests in this planning-only PR.
+A green Node test is not browser visual evidence. Headless SwiftShader is not a physical RTX benchmark. See [BS-001 executed evidence](../evidence/bs-001/README.md) for the tested profiles and outstanding owner gates.
 
 ## BS-001 release gates
 

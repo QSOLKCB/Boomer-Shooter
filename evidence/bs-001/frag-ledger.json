@@ -1,0 +1,151 @@
+{
+  "ticks": 4884,
+  "state": "22c0b668f27d73465f8c3d23a022069d1b03ec8c0ac84879f737963eed775811",
+  "events": "8cbb40dd6958149b4c9549cf48b0ccb89c53e326d33a8e37a0c5eabc61d4df94",
+  "deaths": [
+    {
+      "tick": 2,
+      "type": "death",
+      "source": "player",
+      "target": "kiln",
+      "weapon": "rivet",
+      "shot": 1
+    },
+    {
+      "tick": 331,
+      "type": "death",
+      "source": "kiln",
+      "target": "player",
+      "weapon": "arc",
+      "shot": 13
+    },
+    {
+      "tick": 617,
+      "type": "death",
+      "source": "flux",
+      "target": "player",
+      "weapon": "slag",
+      "shot": 16
+    },
+    {
+      "tick": 844,
+      "type": "death",
+      "source": "kiln",
+      "target": "vise",
+      "weapon": "arc",
+      "shot": 24
+    },
+    {
+      "tick": 891,
+      "type": "death",
+      "source": "flux",
+      "target": "flux",
+      "weapon": "slag",
+      "shot": 27
+    },
+    {
+      "tick": 934,
+      "type": "death",
+      "source": "kiln",
+      "target": "player",
+      "weapon": "arc",
+      "shot": 33
+    },
+    {
+      "tick": 1222,
+      "type": "death",
+      "source": "kiln",
+      "target": "player",
+      "weapon": "arc",
+      "shot": 41
+    },
+    {
+      "tick": 1431,
+      "type": "death",
+      "source": "flux",
+      "target": "kiln",
+      "weapon": "slag",
+      "shot": 43
+    },
+    {
+      "tick": 1679,
+      "type": "death",
+      "source": "kiln",
+      "target": "player",
+      "weapon": "arc",
+      "shot": 54
+    },
+    {
+      "tick": 2065,
+      "type": "death",
+      "source": "flux",
+      "target": "kiln",
+      "weapon": "slag",
+      "shot": 60
+    },
+    {
+      "tick": 2421,
+      "type": "death",
+      "source": "kiln",
+      "target": "flux",
+      "weapon": "arc",
+      "shot": 68
+    },
+    {
+      "tick": 2458,
+      "type": "death",
+      "source": "vise",
+      "target": "player",
+      "weapon": "rivet",
+      "shot": 69
+    },
+    {
+      "tick": 2736,
+      "type": "death",
+      "source": "kiln",
+      "target": "flux",
+      "weapon": "arc",
+      "shot": 82
+    },
+    {
+      "tick": 3012,
+      "type": "death",
+      "source": "flux",
+      "target": "vise",
+      "weapon": "slag",
+      "shot": 97
+    },
+    {
+      "tick": 3258,
+      "type": "death",
+      "source": "kiln",
+      "target": "flux",
+      "weapon": "arc",
+      "shot": 110
+    },
+    {
+      "tick": 3600,
+      "type": "death",
+      "source": "kiln",
+      "target": "vise",
+      "weapon": "arc",
+      "shot": 121
+    },
+    {
+      "tick": 4491,
+      "type": "death",
+      "source": "vise",
+      "target": "kiln",
+      "weapon": "rivet",
+      "shot": 140
+    },
+    {
+      "tick": 4883,
+      "type": "death",
+      "source": "kiln",
+      "target": "vise",
+      "weapon": "arc",
+      "shot": 145
+    }
+  ]
+}

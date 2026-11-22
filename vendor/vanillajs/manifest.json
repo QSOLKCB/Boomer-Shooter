@@ -1,0 +1,57 @@
+{
+  "repository": "https://github.com/QSOLKCB/VANILLAJS",
+  "tag": "v3.2.0",
+  "commit": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+  "roots": [
+    "audio2d",
+    "character",
+    "input",
+    "mod-fps",
+    "navigation",
+    "render-webgl",
+    "time",
+    "weapon-feel"
+  ],
+  "modules": [
+    "audio2d",
+    "character",
+    "collision",
+    "combat3d",
+    "input",
+    "math",
+    "mod-fps",
+    "mod-sdk",
+    "navigation",
+    "projectiles",
+    "render-webgl",
+    "time",
+    "weapon-feel",
+    "weapons"
+  ],
+  "files": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "NOTICE": "3e00b198d9b7e8cf9aba1b6095caf815dd276bd7cff6c3e517927bf690c2c302",
+    "modules/audio2d/index.js": "838c90cc71d2ffb89a205eb47d280721bd36e3bfd8b3f7467f31668359d50034",
+    "modules/character/index.js": "19cd1846a626d306f291aa3aaffa6ec6fbc2159e3cb4386f68ad2dc814aa1fc8",
+    "modules/collision/index.js": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1",
+    "modules/combat3d/index.js": "635ab98c2d654330c0d329c2f2cdbbab57ffde0b027d38cf554ccc10d1dc1c50",
+    "modules/input/index.js": "e157c0eaee89ea240fa0abe43ca24d02620c917f3188f75dcc4d765392eca025",
+    "modules/math/index.js": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7",
+    "modules/mod-fps/index.js": "34b353dca680b68f44969be58b997585b0473e564d4ef215d5908fd3244e600a",
+    "modules/mod-sdk/index.js": "1b8e11d442d77365e4ec79ace6736855dcb8b7946edabbf0123168f790f52b64",
+    "modules/navigation/index.js": "d565333fcc9ffa024ba261697f520fd34ef95ecb7e31d9d614b4dd9ec3f4a5ed",
+    "modules/projectiles/index.js": "9d1c045345593b9babebeb89999d99205a148361166c744d9f17c46ef2f0a0c1",
+    "modules/render-webgl/index.js": "b23b2c427d3bf8b29c991e3cf676bcda13bdffa9dae88bbb9f0f4594088aba2d",
+    "modules/time/index.js": "de94c0bc04e6a269504c5742455ce114f824c2c0d9d59a2fd94555df5d9bb4a2",
+    "modules/weapon-feel/index.js": "a0adcd145fe35ce085d4fba4e83e5e57c10de8d5bc6287f53e7c2d49afcbfb9f",
+    "modules/weapons/index.js": "13dc690282c0f14518d1c0bcc1130d1aabe383bad1354de228c7cea36f206839"
+  },
+  "localChanges": [],
+  "derivatives": {
+    "src/engine/combat3d.js": {
+      "source": "modules/combat3d/index.js",
+      "sha256": "7208d9722b04418a06951c653960b7a9c9c10df6bf305f7d2c6643332d895223",
+      "extension": "integration/armour-method.txt"
+    }
+  }
+}

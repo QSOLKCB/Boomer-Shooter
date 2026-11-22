@@ -15,7 +15,7 @@ This repo owns original arena content and game rules. The engine stays pinned to
 | Game `content/` and `tests/` | Original bounded arena assets and verification |
 | `docs/PERFORMANCE.md` evidence | Source-bound device/cadence numbers; never claims without measurements |
 
-Suggested directories are proposed, not yet present.
+The implemented BS-001 ownership, fixed-tick order and adapters are documented in [the integration notes](ENGINE_INTEGRATION.md).
 
 ## Authoritative tick
 

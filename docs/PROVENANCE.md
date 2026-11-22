@@ -16,10 +16,10 @@ Before first vendoring, inspect `MODULES.json`, resolve full imports, record eac
 
 ## OPT and other QSOL projects
 
-OPT is an optional **methodology/reference**, not automatic dependency or unreviewed code donor. Review every external QSOL repo's exact SHA, API, licence and compatibility before reuse; shared ownership is not a substitute for provenance. Any engine-level adaptation needs its own separate VANILLAJS PR.
+OPT is an optional **methodology/reference**, not automatic dependency or unreviewed code donor. Review every external QSOL repo's exact SHA, API, licence and compatibility before reuse; shared ownership is not a substitute for provenance. Engine-level adaptations require a separate VANILLAJS PR. The owner granted one exception for BS-001 at v3.2.0. [Approved armour method and file hashes](ENGINE_INTEGRATION.md#armour-pickup)
 
 ## Build/release evidence
 
 Record exact game and vendor commit IDs, manifest checksums, commands, browser/backend, source-only-versus-generated distinction, license inventory and packaged file list. Publish only after owner-approved reviewed main. No credentials, personal paths, user data or transient test profiles in the public package.
 
-**This preparatory documentation does not attest that any game art, runtime or package has been built yet.**
+BS-001 supplies a [first-party asset register](../CREDITS.md) and the [verified source manifest](../vendor/vanillajs/manifest.json).
