@@ -1,5 +1,5 @@
 import {Renderer,boxVertices} from '../../vendor/vanillajs/modules/render-webgl/index.js';
-import {mix,perspective,multiplyMatrices,viewMatrix,quatMultiply} from '../../vendor/vanillajs/modules/math/index.js';
+import {mix,perspective,multiplyMatrices,viewMatrix,quatMultiply,rotate} from '../../vendor/vanillajs/modules/math/index.js';
 import {characterView} from '../../vendor/vanillajs/modules/character/index.js';
 import {steelworks,castingWheels} from './steelworks.js';
 import {machine,viewGun,place} from './models.js';
@@ -25,6 +25,13 @@ function pickupMesh(out,p,t) {
 }
 
 function trace(lines,a,b,c) { lines.push(...a,...c,...b,...c); }
+function fragment(world,p,eye,forward,size,color) {
+  const depth=(p[0]-eye[0])*forward[0]+(p[1]-eye[1])*forward[1]+(p[2]-eye[2])*forward[2];
+  if(depth<=.25)return;
+  // Keep close splash debris small enough to see the attacker through it.
+  const side=Math.min(size,depth*.022);
+  boxVertices(p,[side,side,side],color,world);
+}
 function orientation(yaw,pitch) {
   return quatMultiply([0,Math.sin(yaw/2),0,Math.cos(yaw/2)],[Math.sin(pitch/2),0,0,Math.cos(pitch/2)]);
 }
@@ -82,6 +89,7 @@ export class Scene {
     let eye=position(current).map((v,i)=>v+(i===1?(current.health?player.body.eyeHeight:.48):0));
     let camera=view.orientation;
     if(mode==='menu') { eye=[12.0,5.7,16.3]; camera=orientation(.57,-.185); }
+    const forward=rotate(camera,[0,0,-1]);
     const feel=player.feel.presentation();
     r.begin(eye,camera,{fog:.014,fov:feel.fov,resolution});
     castingWheels(world,match.arena.pack.settings.size/2,dt,true);
@@ -116,7 +124,7 @@ export class Scene {
         for(let j=0;j<6;j++) {
           const angle=j*2.4+e.shot;
           const p=[e.point[0]+Math.cos(angle)*age*.043,e.point[1]+.77+Math.sin(j+1)*.27+age*.052-age*age*.004,e.point[2]+Math.sin(angle)*age*.043];
-          boxVertices(p,[.10,.13,.09],j%3===0?bright:color,world);
+          fragment(world,p,eye,forward,.11,j%3===0?bright:color);
         }
       }
       if(e.type==='impact'||e.type==='explosion') {
@@ -127,7 +135,7 @@ export class Scene {
           const a=(i*2.4+e.shot)*1.8, size=(explosive?.12:.046)*(1-age/(life+1));
           const radius=(explosive?.085:.023)*age;
           const p=[e.point[0]+Math.cos(a)*radius,e.point[1]+Math.sin(i+e.shot)*radius+radius*.27,e.point[2]+Math.sin(a)*radius];
-          boxVertices(p,[size,size,size],i%2?e.style.color:bright,world);
+          fragment(world,p,eye,forward,size,i%2?e.style.color:bright);
         }
       }
     }
@@ -142,7 +150,8 @@ export class Scene {
       const lower=reload>0 ? .16*Math.sin(Math.PI*reload/player.feel.profile().weapon.reload) : 0;
       const lens=player.feel.profile().view, focus=(lens.hipFov-feel.fov)/(lens.hipFov-lens.adsFov);
       const sway=motion*(1-.8*focus), sightY=[-.137,-.143,-.084][feel.selected];
-      const offset=[.31*focus+Math.sin(dt*.19)*sway*.008,sightY*focus+lower+Math.cos(dt*.38)*sway*.006,-feel.recoil*.9];
+      const sightX=feel.selected===0?.31:.32;
+      const offset=[sightX*focus+Math.sin(dt*.19)*sway*.008,sightY*focus+lower+Math.cos(dt*.38)*sway*.006,-feel.recoil*.9];
       gl.clear(gl.DEPTH_BUFFER_BIT);
       gl.uniformMatrix4fv(r.vp,false,multiplyMatrices(perspective(1.14,gl.drawingBufferWidth/gl.drawingBufferHeight,.04,12),viewMatrix(offset,[0,0,0,1])));
       gl.uniform1f(r.fog,0); draw(this.guns[feel.selected]);

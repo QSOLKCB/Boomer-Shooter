@@ -442,6 +442,10 @@ def tuning(browser, url, out, exe):
     page.locator("#replay-file").set_input_files(ROOT / "evidence/bs-001/reference-replay.json")
     wait(page, "()=>document.getElementById('message').textContent.startsWith('Verified 4220 ticks')", timeout=90000)
     enter(page)
+    page.keyboard.down("q")
+    wait(page,"foundry.inspect().aim.fov<1.03")
+    capture(page,out,"rivet-sights")
+    page.keyboard.up("q")
     wait(page, "()=>!document.getElementById('incoming').hidden", timeout=35000)
     incoming = page.evaluate("""() => ({
       tick:foundry.inspect().tick, health:foundry.inspect().actors.find(a=>a.id==='player').health,
