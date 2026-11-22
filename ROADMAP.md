@@ -38,6 +38,10 @@ The hosted [BS-001 evidence](evidence/bs-001/README.md) accompanies the slice. O
 
 [Arcade tuning and verification](docs/BS_002.md)
 
+## Parallel experimental proposal — BH-000 / STORM PROTOCOL
+
+**Not started.** [BH-000 design](docs/BULLET_HELL_001.md) and [Work handoff](docs/BULLET_HELL_WORK_HANDOFF.md) describe an optional **first-person bullet-hell boss mode**. It does not replace the existing Deathmatch or reprioritize BS-003–BS-006 without owner approval. Proposed engineering stages: BH-001A (bounded authoritative hazard field), BH-001B (playable 3-phase boss arena), BH-002 (64/128/256/possible 512-hazard evidence), BH-003 (expanded patterns). All game-code changes require new reviewed PRs and a separate engine-integration decision.
+
 ## Stretch ideas, **not** BS-001 promises
 
 Optional speed modifiers, advanced vertical routes, additional arenas, clever enemy coordination, environmental hazards, bot personality profiles, local leaderboard, offline bot tournament, procedurally synthesized soundtrack and strictly bounded `material-grid` effects. Do not call these completed before implementation. Multiplayer/online lobbies are out of scope.
