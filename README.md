@@ -120,7 +120,7 @@ Use WASD / Shift to move, mouse or arrows to aim, Space to jump and left click o
 
 After victory or defeat, choose **Watch replay** for an immediate re-run of the accepted commands, **Save replay** for the versioned JSON, or **Restart encounter**. Deathmatch has its own launch, controls and replay format.
 
-[Design](docs/BULLET_HELL_001.md) · [Numerical verification](evidence/bh-001a/README.md)
+[Design](docs/BULLET_HELL_001.md) · [Numerical verification](evidence/bh-001a/README.md) · [Browser screenshots, replays and performance samples](evidence/bh-001b/README.md)
 
 ## Documentation and next work
 

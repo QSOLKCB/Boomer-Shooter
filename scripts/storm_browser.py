@@ -14,7 +14,12 @@ INPUT_TRACKER = """(() => {
   const entries=[];
   const p=EventTarget.prototype, add=p.addEventListener, remove=p.removeEventListener;
   p.addEventListener=function(k,fn,o){
-    if(keys.has(k))entries.push({target:this,k,fn,signal:o?.signal});
+    // Attribute registrations to a packaged game/engine callsite. Playwright
+    // also installs its own window input interceptors when clicking a locator.
+    const stack=new Error().stack;
+    if(keys.has(k) && stack.split('\\n').slice(2).some(frame=>
+      frame.includes(location.origin+location.pathname.slice(0,location.pathname.lastIndexOf('/')+1)+'src/') ||
+      frame.includes(location.origin+location.pathname.slice(0,location.pathname.lastIndexOf('/')+1)+'vendor/')))entries.push({target:this,k,fn,signal:o?.signal});
     return add.call(this,k,fn,o);
   };
   p.removeEventListener=function(k,fn,o){
@@ -54,17 +59,25 @@ def play(browser, url, out, exe):
     page.keyboard.down("d")
     page.keyboard.down("f")
     at(page, "storm.inspect().position[0]>.5 && storm.inspect().boss<240")
+    page.mouse.move(440,300)
+    page.mouse.down()
+    page.mouse.move(510,300,steps=3)
+    page.mouse.up()
+    at(page, "Math.abs(storm.inspect().yaw)>.04")
     page.evaluate("window.dispatchEvent(new Event('blur'))")
     page.keyboard.up("d")
     page.keyboard.up("f")
     assert page.evaluate("storm.inspect().mode") == "paused"
     page.evaluate("delete document.querySelector('main').requestPointerLock")
+    resume_tick = page.evaluate("storm.inspect().tick")
     page.locator("#action").click()
-    at(page, "storm.inspect().captured && storm.inspect().tick>32")
+    wait(page, "t=>storm.inspect().captured && storm.inspect().tick>=t+5", arg=resume_tick)
     tape = page.evaluate("storm.receipt()")
     assert not tape["runs"][-1][1][4] & 6 and tape["runs"][-1][1][0] == 0
-    page.mouse.move(560, 330)
-    at(page, "Math.abs(storm.inspect().yaw)>.01")
+    before = page.evaluate("storm.inspect().yaw")
+    page.keyboard.down("ArrowRight")
+    wait(page, "a=>Math.abs(storm.inspect().yaw-a)>.04", arg=before)
+    page.keyboard.up("ArrowRight")
     page.evaluate("document.exitPointerLock()")
     at(page, "storm.inspect().mode==='paused'")
     paused = page.evaluate("storm.inspect().tick")
@@ -83,8 +96,21 @@ def play(browser, url, out, exe):
 
     ctx.set_offline(True)
     keyboard_start(page, "#new")
+    at(page, "storm.inspect().tick>=14")
+    page.keyboard.down("d")
+    at(page, "storm.inspect().tick>=112")
+    page.keyboard.up("d")
+    dodge = page.evaluate("storm.inspect()")
+    assert dodge["position"][0] > 8 and dodge["hp"] == 100 and dodge["spawned"] > 0
+    page.keyboard.press("p")
+    keyboard_start(page, "#new")
+    at(page, "storm.inspect().tick>=112")
+    stationary = page.evaluate("storm.inspect()")
+    assert stationary["hp"] < dodge["hp"]
     at(page, "storm.inspect().live>15")
     capture(page, out, "reactor-volley")
+    at(page, "storm.inspect().pattern===2 && storm.inspect().live>=90")
+    capture(page, out, "rotating-spiral")
     at(page, "storm.inspect().result==='defeat'")
     capture(page, out, "operator-down")
     defeat = page.evaluate("storm.receipt()")
@@ -115,6 +141,7 @@ def play(browser, url, out, exe):
             keyboard_start(page)
             at(page, "storm.inspect().tick>=4")
             page.keyboard.press("p")
+        assert page.evaluate("liveInputListeners()") > 0
         page.evaluate("""s=>addEventListener('pagehide',()=>{
           const state=s?storm.inspect():foundry.inspect();
           sessionStorage.setItem('last-teardown',JSON.stringify({game:s?'storm':'deathmatch',
@@ -128,9 +155,6 @@ def play(browser, url, out, exe):
         assert row["gpu"] == {"buffers": 0, "programs": 0}, row
         switches.append(row)
     assert not any(errors.values()), errors
-    dump(out/"browser.json", dict(environment=meta, victory=victory["state"], defeat=defeat["state"],
-        switches=switches, captureRejection=True, blur=True, unlock=True, simulatedHidden=True,
-        contextRestoration=True, warmedOffline=True, replayVerifiedAtScale=.7, errors=errors))
     ctx.close()
     bad = browser.new_page()
     bad.add_init_script("""const get=HTMLCanvasElement.prototype.getContext;
@@ -138,6 +162,9 @@ def play(browser, url, out, exe):
     bad.goto(url+"storm.html")
     at(bad, "document.body.dataset.mode==='error' && document.querySelector('#intro').textContent.includes('WebGL')")
     bad.close()
+    dump(out/"browser.json", dict(environment=meta, victory=victory["state"], defeat=defeat["state"],
+        unsupportedWebGL=True, dodge=dodge, stationary=stationary, switches=switches, captureRejection=True, blur=True, unlock=True, simulatedHidden=True,
+        contextRestoration=True, warmedOffline=True, replayVerifiedAtScale=.7, errors=errors))
 
 
 def load(browser, url, out, exe):

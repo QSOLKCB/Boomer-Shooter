@@ -1,0 +1,244 @@
+{
+  "environment": {
+    "runtimeSHA256": "1bc64b1bf24859ad427be0f0592626bef5595637c0aaf6a2fd620d6a58aa3739",
+    "runtimeMatchesHead": true,
+    "source": "be8781933c2c208cc0b0158e9a8ffc5b5ef1456b",
+    "engine": "7a3a5a3ec49aed5b7063a05614951e69bb257da6",
+    "browser": "151.0.7922.34",
+    "binarySHA256": "e11fc9ce65c96313476f7ee9844b6fb6a9220fb048693cfe9eee00acf4170a9f",
+    "playwright": "1.62.0",
+    "os": "Linux",
+    "kernel": "6.18.57",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)",
+    "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+    "dpr": 1,
+    "viewport": [
+      960,
+      600
+    ],
+    "drawingBuffer": [
+      960,
+      600
+    ]
+  },
+  "victory": {
+    "round": 5,
+    "age": 50,
+    "phase": 3,
+    "plan": {
+      "kind": 0,
+      "phase": 3,
+      "duration": 102,
+      "angle": 0,
+      "dial": 5.12517599295208,
+      "lane": -5
+    },
+    "hp": 40,
+    "boss": 0,
+    "result": "victory"
+  },
+  "defeat": {
+    "round": 6,
+    "age": 24,
+    "phase": 1,
+    "plan": {
+      "kind": 1,
+      "phase": 1,
+      "duration": 126,
+      "angle": 0,
+      "dial": 5.45672974223942,
+      "lane": -4
+    },
+    "hp": 0,
+    "boss": 240,
+    "result": "defeat"
+  },
+  "unsupportedWebGL": true,
+  "dodge": {
+    "mode": "playing",
+    "tick": 115,
+    "hp": 100,
+    "boss": 240,
+    "phase": 1,
+    "pattern": 0,
+    "position": [
+      11.649999000000001,
+      1.0000000000287557e-06,
+      10
+    ],
+    "yaw": 0,
+    "pitch": 0,
+    "live": 21,
+    "checks": 1155,
+    "spawned": 21,
+    "result": null,
+    "verified": false,
+    "raf": true,
+    "meshes": 5,
+    "voices": 0,
+    "disposed": false,
+    "captured": false,
+    "calls": 5,
+    "heads": 21,
+    "uploadBytes": 19152,
+    "hazardUploadMs": 0.10000000149011612,
+    "drawSubmitMs": 0
+  },
+  "stationary": {
+    "mode": "playing",
+    "tick": 113,
+    "hp": 80,
+    "boss": 240,
+    "phase": 1,
+    "pattern": 0,
+    "position": [
+      0,
+      1.0000000000287557e-06,
+      10
+    ],
+    "yaw": 0,
+    "pitch": 0,
+    "live": 20,
+    "checks": 1102,
+    "spawned": 21,
+    "result": null,
+    "verified": false,
+    "raf": true,
+    "meshes": 5,
+    "voices": 0,
+    "disposed": false,
+    "captured": false,
+    "calls": 5,
+    "heads": 20,
+    "uploadBytes": 18240,
+    "hazardUploadMs": 0,
+    "drawSubmitMs": 0
+  },
+  "switches": [
+    {
+      "game": "storm",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "deathmatch",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "storm",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "deathmatch",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "storm",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "deathmatch",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "storm",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "deathmatch",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "storm",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    },
+    {
+      "game": "deathmatch",
+      "gpu": {
+        "buffers": 0,
+        "programs": 0
+      },
+      "disposed": true,
+      "raf": false,
+      "voices": 0,
+      "listeners": 0
+    }
+  ],
+  "captureRejection": true,
+  "blur": true,
+  "unlock": true,
+  "simulatedHidden": true,
+  "contextRestoration": true,
+  "warmedOffline": true,
+  "replayVerifiedAtScale": 0.7,
+  "errors": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "httpErrors": []
+  }
+}
