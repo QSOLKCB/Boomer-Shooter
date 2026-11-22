@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#141817"><meta name="description" content="An offline industrial arena deathmatch. One operator, three rival machines.">
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="./style.css">
+  <title>The Foundry Pit • Boomer-Shooter</title>
+</head>
+<body data-mode="menu">
+  <main>
+    <canvas id="arena" tabindex="0" aria-label="First person arena. WASD to move, arrows or mouse to aim, F to fire."></canvas>
+    <div id="vignette"></div><div id="damage"></div>
+    <header class="brand"><i class="mark" aria-hidden="true"></i><div>BOOMER<strong>SHOOTER</strong></div></header>
+    <div id="edition">QSOL-IMC <span>/</span> BS–001</div>
+    <section id="panel" aria-labelledby="title">
+      <div class="card">
+        <div class="kicker" id="kicker">ARENA 01 <b></b> FREE-FOR-ALL</div>
+        <h1 id="title">THE<br><em>FOUNDRY</em><br>PIT<span>.</span></h1>
+        <p id="intro">One operator. Three rival machines. Take the high gantry or fight for armour on the casting floor.</p>
+        <div id="menu-rules" class="rules"><span><b>04</b> COMBATANTS</span><span><b id="rule-frags">10</b> FRAGS</span><span><b id="rule-time">05:00</b> LIMIT</span></div>
+        <div id="results" hidden></div>
+        <div class="buttons"><button id="action" class="primary" disabled>Loading arena</button><button id="options" aria-expanded="false">Options</button><button id="new" hidden>New match</button></div>
+        <div id="settings" hidden>
+          <label>Mouse sensitivity <input id="sens" type="range" min=".4" max="2.4" value="1" step=".1"></label>
+          <label>Invert mouse Y <input id="invert" type="checkbox"></label>
+          <label>Procedural audio <input id="sound" type="checkbox"></label>
+          <label>Render scale <select id="scale"><option value="1">Native</option><option value=".7">70%</option></select></label>
+          <label>Frag target <select id="limit"><option>10</option><option>5</option><option>15</option><option>1</option></select></label>
+          <label>Time limit <select id="duration"><option value="18000">5 minutes</option><option value="10800">3 minutes</option><option value="3600">1 minute</option></select></label>
+        </div>
+        <button id="save" class="link" hidden>Save command replay ↓</button>
+        <p id="message" role="status"></p>
+      </div>
+      <footer id="control-guide"><span><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Aim / fire</span><span><kbd>Space</kbd> Jump</span><span><kbd>1–3</kbd> Weapons</span><span><kbd>R</kbd> Reload</span><span><kbd>Tab</kbd> Scores</span></footer>
+    </section>
+    <section id="hud" aria-label="Match status" hidden>
+      <div class="clock"><small>DEATHMATCH</small><b id="time">05:00</b></div>
+      <aside class="leader"><div id="leader"></div><ol id="feed"></ol></aside>
+      <div id="reticle"><i></i></div><div id="hitmark">×</div>
+      <div id="notice" role="status"></div>
+      <div class="vitals"><div><small>HEALTH</small><b id="hp">100</b></div><div><small>ARMOUR</small><b id="ap">25</b></div><div><small>FRAGS</small><b id="frags">0</b></div></div>
+      <div class="weapon"><small id="weapon-name">RIVET RIFLE</small><b id="ammo">06</b><span id="reserve"> / 36</span><div id="weapon-state"></div></div>
+      <div id="capture-hint">Click arena to capture mouse · F fires · Esc pauses</div>
+      <div id="board" hidden></div>
+    </section>
+    <noscript>This arena needs JavaScript enabled.</noscript>
+  </main>
+  <script type="module" src="./src/boot.js"></script>
+</body></html>

@@ -22,4 +22,4 @@ OPT is an optional **methodology/reference**, not automatic dependency or unrevi
 
 Record exact game and vendor commit IDs, manifest checksums, commands, browser/backend, source-only-versus-generated distinction, license inventory and packaged file list. Publish only after owner-approved reviewed main. No credentials, personal paths, user data or transient test profiles in the public package.
 
-**This preparatory documentation does not attest that any game art, runtime or package has been built yet.**
+BS-001 supplies a [first-party asset register](../CREDITS.md) and the [verified source manifest](../vendor/vanillajs/manifest.json).

@@ -1,7 +1,7 @@
 # ChatGPT Work — BS-001 implementation handoff
 
 **Destination:** [QSOLKCB/Boomer-Shooter](https://github.com/QSOLKCB/Boomer-Shooter).
-**Status:** BS-000 is the planning/documentation PR. **BS-001 is not implemented.**
+**Historical BS-000 assignment.** BS-001 now has a [playable runtime and launch guide](../README.md).
 **Upstream:** VANILLAJS release **v3.2.0 — SEDIMENT & SIGNAL**, exact tagged commit `7a3a5a3ec49aed5b7063a05614951e69bb257da6`.
 
 ## Assignment

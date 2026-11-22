@@ -1,6 +1,6 @@
 # VANILLAJS v3.2.0 — verified baseline and engineering boundaries
 
-**Release:** [VANILLAJS v3.2.0 — SEDIMENT & SIGNAL](https://github.com/QSOLKCB/VANILLAJS/releases/tag/v3.2.0). **Exact tagged commit:** `7a3a5a3ec49aed5b7063a05614951e69bb257da6` (confirmed from GitHub release and tag ref 2026-11-22). This is the **proposed consumer pin**. The game has **not** yet vendored these files or produced a byte-level copy receipt.
+**Release:** [VANILLAJS v3.2.0 — SEDIMENT & SIGNAL](https://github.com/QSOLKCB/VANILLAJS/releases/tag/v3.2.0). **Exact tagged commit:** `7a3a5a3ec49aed5b7063a05614951e69bb257da6` (confirmed from GitHub release and tag ref 2026-11-22). BS-001 vendors this consumer pin. See the [byte-level copy receipt](../vendor/vanillajs/manifest.json).
 
 Relevant sources in that **exact commit**:
 - [`MODULES.json`](https://github.com/QSOLKCB/VANILLAJS/blob/7a3a5a3ec49aed5b7063a05614951e69bb257da6/MODULES.json), [`BUILD_A_GAME.md`](https://github.com/QSOLKCB/VANILLAJS/blob/7a3a5a3ec49aed5b7063a05614951e69bb257da6/BUILD_A_GAME.md)
@@ -39,4 +39,4 @@ The existing Block Arena Foundry has skirmish/survival rules and example bot log
 5. Test installed offline package and actual deployment subpath; do not assume `file://` works with native modules.
 6. Perform separate, reviewed upstream PR and deliberate version re-pin for any reusable new API.
 
-**No claim of device performance, implemented FPS game or complete vendor source-copy validation is made by this documentation PR.**
+See [the consumer integration](ENGINE_INTEGRATION.md) and [executed evidence](../evidence/bs-001/README.md) for BS-001.
