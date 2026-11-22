@@ -1,61 +1,122 @@
-# BOOMER-SHOOTER — The Foundry Pit
+# BOOMER-SHOOTER — THE FOUNDRY PIT
 
-A fast, offline industrial arena FPS for one human and three CPU rivals. Kiln closes with the Arc Repeater, Vise peeks from cover with a Rivet Rifle, and Flux patrols with a travelling Slag Launcher. Every combatant can win. First to **10 frags** or the best score at **five minutes** takes the pit.
+**ONE OPERATOR. THREE RIVAL MACHINES. ONE ARENA.**
 
-[Play The Foundry Pit on GitHub Pages](https://qsolkcb.github.io/Boomer-Shooter/)
+An original, fast, offline-first industrial arena FPS built with [QSOLKCB/VANILLAJS v3.2.0](https://github.com/QSOLKCB/VANILLAJS/releases/tag/v3.2.0). Play against **Kiln**, **Vise** and **Flux** in a real free-for-all: the machines hunt, fight and eliminate *one another*, not just you.
 
-## Play locally
+[**Play the game**](https://qsolkcb.github.io/Boomer-Shooter/) · [Release notes — proposed v0.1.0](RELEASE_NOTES_v0.1.0.md) · [Development roadmap](ROADMAP.md) · [Verification evidence](evidence/bs-002/README.md)
 
-Clone this repository, open a terminal in its root, and run:
+![The Foundry Pit — original in-game Chromium screenshot of the operator aiming down the casting aisle](evidence/bs-002/rivet-sights.jpg)
+
+> **Implementation:** BS-001 and BS-002 are merged. **Release status:** v0.1.0 is proposed, not yet tagged. The game is publicly playable on GitHub Pages; owner acceptance and native GPU profiling remain separate checks.
+
+## Play now
+
+**Browser:** [qsolkcb.github.io/Boomer-Shooter/](https://qsolkcb.github.io/Boomer-Shooter/)
+
+Select **Enter the pit** to request mouse capture in the same click that starts the match. The arena, bots and clock remain frozen while capture is pending; the entry click cannot accidentally fire a shot. If your browser declines pointer lock, try the arena again or choose **Play without capture** for drag/arrow-key aiming. Keyboard activation of the entry button works without mouse capture.
+
+The default match is **one human versus three CPU rivals**, first to **10 frags** or the highest score after **five minutes**. Every combatant can win. Self-eliminations give no frag; ties use fewer deaths and then a stable ID.
+
+| Machine | Style | Weapon |
+| --- | --- | --- |
+| **Kiln** | Aggressive, closes distance | **Arc Repeater** — automatic |
+| **Vise** | Uses cover and precise sightlines | **Rivet Rifle** — precision hitscan |
+| **Flux** | Mobile patrol and area pressure | **Slag Launcher** — travelling explosive shot |
+
+The arena has a central casting floor, cover, a west gantry and contested health, armour and ammunition supplies. The Slag Launcher can inflict self-damage. A frag feed, live scoreboard, incoming-damage indicator and match results show the consequences of actual combat events.
+
+## Controls
+
+| Input | Action |
+| --- | --- |
+| **W A S D** / **Shift** | Move and strafe / sprint |
+| **Mouse** or **arrow keys** | Look; drag to look in uncaptured mode |
+| **Left click** / **F** | Fire (tap rifle/launcher; hold repeater) |
+| **Right click** / **Q** | Hold sights for narrower FOV and finer aim |
+| **Space** | Jump; Arcade mode supports a short pre-landing jump buffer |
+| **R** | Reload |
+| **1 / 2 / 3** | Rivet Rifle / Arc Repeater / Slag Launcher |
+| **Tab** | Hold live scoreboard |
+| **P / Escape** | Pause; Escape releases mouse capture |
+| **Rematch** | Begin a fresh match |
+
+**Options** offers **Arcade or Classic** movement, **Easy/Normal/Hard** CPU opponents, mouse sensitivity/invert Y, native or 70% render scale, adjustable frag and time limits and opt-in procedural audio. The sound starts muted. Health pads recharge after **9 seconds** and ammo after **6 seconds** of simulation time. Pads do not refill ammunition that is already full.
+
+## Run locally — no npm installation
+
+With Python 3 and a modern WebGL-capable browser:
 
 ```sh
+git clone https://github.com/QSOLKCB/Boomer-Shooter.git
+cd Boomer-Shooter
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open **http://127.0.0.1:8000/** in Chromium. Click **Enter the pit** to capture the mouse and start the match in one gesture. The clock, rivals and weapons wait for capture, including on resume and rematch. If your browser declines, click the arena to retry or select **Play without capture** for drag or arrow-key aiming. Activating the entry button with the keyboard starts keyboard play directly.
+Open **http://127.0.0.1:8000/**. The browser game uses native ES modules and locally packaged assets. A network connection is not required after cloning, but the local HTTP server **must remain running for cold starts and reloads**. Opening `index.html` directly with `file://` is not supported. The project does **not** install a service worker, and a fresh browser load is not available without an HTTP origin.
 
-**Options** lets you choose Arcade or Classic movement, Easy/Normal/Hard rivals, frag and time limits, sensitivity, invert Y, render scale and sound. Sound starts muted. Once cloned, the game runs without internet access. Keep the local HTTP server running for cold starts and reloads.
+## Real engine integration
 
-| Control | Action |
-| --- | --- |
-| WASD / Shift | Move, strafe / sprint |
-| Mouse / arrow keys | Aim. Drag to look if pointer capture is unavailable |
-| Hold right mouse / Q | Raise sights for a tighter field of view and finer aim |
-| Left click / F | Fire. Tap the rifle or launcher, hold the repeater |
-| Space / R | Jump / reload the selected weapon |
-| 1 / 2 / 3 | Rivet Rifle / Arc Repeater / Slag Launcher |
-| Tab | Hold for the live scoreboard |
-| P / Escape | Pause and release the mouse |
-| Rematch | Start a fresh match with the selected rules |
+The project vendors the bounded public-module closure from **VANILLAJS v3.2.0 — SEDIMENT & SIGNAL** at immutable commit:
 
-The green cross restores health. Cyan plates restore armour, and amber rounds replenish reserves. Look for the large plate on the west gantry or contest the casting circle on the floor. Slag splash can hurt its owner. Self-eliminations earn zero frags. Ties resolve by fewer deaths, then stable combatant ID.
+```text
+7a3a5a3ec49aed5b7063a05614951e69bb257da6
+```
 
-In Arcade handling, tap Space just before landing to chain the next jump. The orange bearing marker points toward incoming damage. Amber, cyan and magenta flashes distinguish the rifle, repeater and launcher. Health pads recharge in nine seconds and ammo in six. A full reserve leaves the rounds on the floor until someone has reloaded and can use them.
+The engine provides the character controller, fixed time, input, collision, projectiles, Combat3D damage/attribution, weapon feel, navigation primitives and WebGL1 rendering. The *game* owns its arena, CPU decision-making, match rules, presentation, UI and replay format. Original procedural graphics and locally generated audio do not depend on a remote asset service.
 
-## Engine and verification
+The only approved consumer derivative is the documented **Combat3D armour pickup** extension. See [engine integration](docs/ENGINE_INTEGRATION.md) and the [per-file vendoring manifest](vendor/vanillajs/manifest.json). Do not silently upgrade to VANILLAJS `main` or treat demo code as a public API.
 
-VANILLAJS **v3.2.0 — SEDIMENT & SIGNAL**, commit `7a3a5a3ec49aed5b7063a05614951e69bb257da6`, owns movement, weapon handling, combat, collision, navigation primitives and rendering. The browser checks the vendoring receipt at startup. The consumer armour extension and its regression are documented in the [engine integration notes](docs/ENGINE_INTEGRATION.md).
+Gameplay advances at **60 authoritative simulation ticks per second** with a five-step catch-up cap. Render frames, visual effects and audio do not define combat outcomes. The recorded replay format binds the accepted commands, seed, movement and difficulty rules to the match state. **BS-002 replays can read BS-001 tapes.** Same-runtime verification is supported; the archived Node and Chromium Float64 hashes are **not** cross-runtime identical.
+
+From pause or results, choose **Save command replay**. To verify it, use **Options → Verify saved replay** in the **same browser environment** that produced the tape.
+
+## Test and package
+
+Node is used for developer verification, **not** as a browser runtime dependency:
 
 ```sh
 node --test tests/*.test.mjs
 node scripts/verify-replay.mjs evidence/bs-001/node-reference-replay.json
+(cd evidence/bs-002 && sha256sum -c SHA256SUMS)
 ```
 
-Use **Save command replay** from pause or results to export your run. In the same browser, open **Options → Verify saved replay** and select that JSON. The game independently re-executes the commands from tick zero and compares the state and event hashes. The CLI example uses the Node-generated fixture. Chromium and Node produced different hashes for the same reference commands in this study.
-
-The developer browser probe packages the runtime into a fresh nested directory, serves it on loopback, drives Chromium, captures screenshots and records raw timings. It uses Python Playwright for testing. With Playwright and a Chromium executable installed:
+To package into a fresh, empty directory:
 
 ```sh
-python3 scripts/browser.py --chromium /path/to/chromium --out /tmp/foundry-evidence
+python3 scripts/package_pages.py /tmp/foundry-site
+python3 -m http.server 8001 --bind 127.0.0.1 --directory /tmp/foundry-site
 ```
 
-The [BS-001 evidence](evidence/bs-001/README.md) includes the packaged browser run, screenshots, replay, frame samples and hardware limitations.
+For **actual Chromium interaction and replay evidence**, install Python Playwright separately (testing only), provide a Chromium binary and run:
 
-BS-002 records movement and bot skill in each replay and still reads BS-001 tapes. [Arcade tuning notes](docs/BS_002.md) · [Mouse capture regression, match replays and 1080p timings](evidence/bs-002/README.md).
+```sh
+python3 scripts/browser.py --chromium /path/to/chromium --suite all --out /tmp/foundry-evidence
+```
 
-## Project documents
+The [Pages workflow](.github/workflows/pages.yml) runs the consumer tests and packages the complete static runtime. Deployment is restricted to reviewed `main`; the merge of BS-002 has a [successful Pages workflow](https://github.com/QSOLKCB/Boomer-Shooter/actions/runs/45036209648).
 
-- [AGENTS.md](AGENTS.md) and [original Work handoff](docs/WORK_HANDOFF.md)
-- [Roadmap](ROADMAP.md), [game design](docs/GAME_DESIGN.md) and [architecture](docs/ARCHITECTURE.md)
-- [Engine baseline](docs/ENGINE_BASELINE.md), [integration notes](docs/ENGINE_INTEGRATION.md) and [vendoring manifest](vendor/vanillajs/manifest.json)
-- [Acceptance](docs/ACCEPTANCE.md), [performance programme](docs/PERFORMANCE.md), [provenance](docs/PROVENANCE.md) and [credits](CREDITS.md)
+## Performance: measured, not assumed
+
+The [BS-002 evidence record](evidence/bs-002/README.md) documents a **1920×1080** browser drawing buffer using **Chrome Headless Shell 151 / ANGLE Vulkan SwiftShader (software rendering)**, as well as a played deathmatch, actual bot-versus-bot frags and verified replays. In that software reference, BS-002 Arcade recorded **p50/p95 render callback intervals of 100.1/250.0 ms** and **p50/p95 individual simulation steps of 1.0/5.4 ms**.
+
+Those numbers describe **that measured hosted run only**. They are *not* native GPU timing, a proven speedup over BS-001 or evidence of 1080p/60 FPS on physical hardware. The CPU and software renderer were shared, and the comparison rulesets behaved differently. See the [raw frame and tick samples](evidence/bs-002/README.md#1080p-reference).
+
+The recorded BS-002 execution passed **28 consumer tests** on Node 24.22.3, verified browser replay in the producing Chromium environment, and exercised repeated match teardown. Manual mouse-feel/audio assessment, native GPU testing, other browser families and an eight-bot stress ladder remain open.
+
+## Documentation and next work
+
+| Document | Purpose |
+| --- | --- |
+| [Roadmap](ROADMAP.md) | BS-000 through BS-006, with BS-003 arena expansion next |
+| [AGENTS.md](AGENTS.md) | Repo policy, pinned APIs and review gates |
+| [Game design](docs/GAME_DESIGN.md) | Arena, weapons, bot personalities, match rules |
+| [BS-002 engineering notes](docs/BS_002.md) | Arcade handling, capture gate, impacts, bot skill, supply tuning |
+| [Acceptance](docs/ACCEPTANCE.md) / [Performance](docs/PERFORMANCE.md) | Behavioral gates and measurement rules |
+| [BS-001 evidence](evidence/bs-001/README.md) / [BS-002 evidence](evidence/bs-002/README.md) | Reproduction logs, screenshots, match receipts and hardware caveats |
+| [Original ChatGPT Work handoff](docs/WORK_HANDOFF.md) | Historical implementation brief |
+| [Credits](CREDITS.md) / [Provenance](docs/PROVENANCE.md) | Original game content and upstream licensing |
+
+**QSOL-IMC — THIS IS NOT A PRODUCT. THIS IS INDEPENDENCE.**
+
+Apache-2.0. Original game content and included source are covered by the repository licence; vendored VANILLAJS licence and notices remain in `vendor/vanillajs/`.

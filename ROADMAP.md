@@ -1,6 +1,6 @@
 # Arena Shooter Roadmap
 
-**Engine baseline:** VANILLAJS `v3.2.0` at `7a3a5a3ec49aed5b7063a05614951e69bb257da6`. BS-001 merged in PR #2. PR #3 published the game on GitHub Pages. BS-002 is implemented for review. BS-003 is the next gameplay milestone.
+**Engine baseline:** VANILLAJS `v3.2.0` at `7a3a5a3ec49aed5b7063a05614951e69bb257da6`. BS-001 merged in PR #2. PR #3 published the game on GitHub Pages. BS-002 merged in PR #4. BS-003 is the next gameplay milestone. Proposed first release notes: [v0.1.0 — The Foundry Pit: First Blood](RELEASE_NOTES_v0.1.0.md). Manual owner sign-off and the release tag remain separate.
 
 | Phase | Deliverable | Exit gate |
 | --- | --- | --- |
