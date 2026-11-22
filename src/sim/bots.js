@@ -1,9 +1,10 @@
 import {findPath} from '../../vendor/vanillajs/modules/navigation/index.js';
-import {seededRandom} from '../../vendor/vanillajs/modules/math/index.js';
+import {clamp,seededRandom} from '../../vendor/vanillajs/modules/math/index.js';
 import {sight} from './arena.js';
 
 const flatDistance = (a,b) => Math.hypot(a[0]-b[0],a[2]-b[2]);
 const chest = p => [p[0],p[1]+1.12,p[2]];
+const MAX_AIM_PITCH = Math.PI/2-.01; // WeaponFeel.setAim's inclusive limit.
 
 export function createBrain(index, seed) {
   return {index, random:seededRandom(seed), target:null, last:null, seenAt:-1000, ready:0, nextShot:0,
@@ -90,7 +91,8 @@ export function botIntent(match, unit, eye) {
   const aim = b.last && chest(b.last);
   if (target?.health>0 && aim) {
     const ax=aim[0]-p[0], az=aim[2]-p[2], range=Math.max(.001,Math.hypot(ax,az));
-    yaw=Math.atan2(-ax,-az)+b.error[0]; pitch=Math.atan2(aim[1]-eye[1],range)+b.error[1];
+    yaw=Math.atan2(-ax,-az)+b.error[0];
+    pitch=clamp(Math.atan2(aim[1]-eye[1],range)+b.error[1],-MAX_AIM_PITCH,MAX_AIM_PITCH);
     if (b.mode==='engage') {
       const ideal=profile.range*[.40,.62,.56][b.index], advance=range>ideal+2 ? .9 : range<ideal-2 ? -.55 : 0;
       const side=b.side*(b.index===2?.90:.54);

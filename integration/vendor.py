@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 VENDOR = ROOT / "vendor/vanillajs"
 PIN = "7a3a5a3ec49aed5b7063a05614951e69bb257da6"
+APPROVED_ARMOUR_CLASS_SHA256 = "7208d9722b04418a06951c653960b7a9c9c10df6bf305f7d2c6643332d895223"
 ROOTS = ("audio2d", "character", "input", "mod-fps", "navigation", "render-webgl", "time", "weapon-feel")
 IMPORT = re.compile(r"""(?:from\s*|import\s*)['"]([^'"]+)['"]""")
 digest = lambda data: hashlib.sha256(data).hexdigest()
@@ -20,7 +21,10 @@ def derive(source):
     before = "  #emit(e){"
     assert text.count(before) == 1
     method = (ROOT / "integration/armour-method.txt").read_text()
-    return text.replace(before, method + before).encode()
+    adapted = text.replace(before, method + before).encode()
+    if digest(adapted) != APPROVED_ARMOUR_CLASS_SHA256:
+        raise ValueError("Generated Combat3D differs from the approved BS-001 armour exception")
+    return adapted
 
 
 def main():
@@ -31,6 +35,7 @@ def main():
     def blob(path):
         return subprocess.check_output(["git", "-C", args.checkout, "show", f"{PIN}:{path}"])
 
+    adapted = derive(blob("modules/combat3d/index.js"))
     metadata = json.loads(blob("MODULES.json"))["modules"]
     pending = ["LICENSE", "NOTICE", *(metadata[name]["entry"] for name in ROOTS)]
     files = {}
@@ -50,7 +55,6 @@ def main():
                 pending.append(posixpath.normpath(posixpath.join(posixpath.dirname(path), dep)))
 
     derived = "src/engine/combat3d.js"
-    adapted = derive(blob("modules/combat3d/index.js"))
     (ROOT / derived).write_bytes(adapted)
     manifest = dict(repository="https://github.com/QSOLKCB/VANILLAJS", tag="v3.2.0",
                     commit=PIN, roots=ROOTS, modules=sorted(p.split("/")[1] for p in files if p.endswith(".js")),

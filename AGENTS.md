@@ -13,6 +13,7 @@ Read `README.md`, `ROADMAP.md`, `docs/WORK_HANDOFF.md`, `docs/ENGINE_BASELINE.md
 
 - **VANILLAJS v3.2.0:** immutable commit **`7a3a5a3ec49aed5b7063a05614951e69bb257da6`**. Read the pinned `MODULES.json` and exported source APIs. Do **not** follow VANILLAJS `main`, assume an unreleased feature or treat a demo-owned helper as a stable public interface.
 - Game-specific AI, arena layout, spawn strategy, scoreboard, match rules, UI and original media belong here. Reusable engine extensions belong upstream via a separate owner-approved PR, with a corresponding reviewed pin update here.
+- **BS-001 armour exception.** The owner approved the existing `Combat3D.pickupArmour(id, amount)` derivative from game commit `c8f9559a56fbdd4fe915b2bc579b5b258c6cfd5e` for BS-001 at the v3.2.0 pin above. The exception covers the exact bytes identified in [Engine integration](docs/ENGINE_INTEGRATION.md#armour-pickup). Changes to the derivative, reuse in another milestone or a new engine pin require the usual upstream and consumer review.
 - Native browser ES modules, local self-contained assets and browser standards first. No npm **runtime** dependencies, Node frameworks, CDNs, telemetry, accounts, cloud backends, Docker, Kubernetes, implicit network calls or third-party engine.
 - Existing Node CLI commands may be used for verified upstream development/test tasks; no dependency manager or bundler should be required to *play*.
 - Preserve applicable Apache-2.0 LICENSE and NOTICE, third-party attribution, and source-file hashes in a local vendoring receipt.

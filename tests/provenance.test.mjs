@@ -20,6 +20,13 @@ test('every upstream byte and transitive import is receipted; consumer derivativ
   for(const [p,sha] of Object.entries(manifest.files)) assert.equal(hash(bytes(p)),sha,p);
   const derived=bytes('../../src/engine/combat3d.js').toString(), method=bytes('../../integration/armour-method.txt').toString();
   assert.equal(derived,bytes('modules/combat3d/index.js').toString().replaceAll("from '../","from '../../vendor/vanillajs/modules/").replace('  #emit(e){',method+'  #emit(e){'));
-  assert.equal(hash(derived),manifest.derivatives['src/engine/combat3d.js'].sha256);
+  // The owner approved this exact derivative at v3.2.0 on game PR #2.
+  const approved='7208d9722b04418a06951c653960b7a9c9c10df6bf305f7d2c6643332d895223';
+  assert.equal(manifest.commit,'7a3a5a3ec49aed5b7063a05614951e69bb257da6');
+  assert.deepEqual(manifest.localChanges,[]);
+  assert.deepEqual(manifest.derivatives,{'src/engine/combat3d.js':{
+    source:'modules/combat3d/index.js',extension:'integration/armour-method.txt',sha256:approved
+  }});
+  assert.equal(hash(derived),approved);
   assert(bytes('../../src/boot.js').toString().includes(hash(bytes('manifest.json'))));
 });

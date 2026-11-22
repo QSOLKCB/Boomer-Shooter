@@ -16,7 +16,7 @@ Before first vendoring, inspect `MODULES.json`, resolve full imports, record eac
 
 ## OPT and other QSOL projects
 
-OPT is an optional **methodology/reference**, not automatic dependency or unreviewed code donor. Review every external QSOL repo's exact SHA, API, licence and compatibility before reuse; shared ownership is not a substitute for provenance. Any engine-level adaptation needs its own separate VANILLAJS PR.
+OPT is an optional **methodology/reference**, not automatic dependency or unreviewed code donor. Review every external QSOL repo's exact SHA, API, licence and compatibility before reuse; shared ownership is not a substitute for provenance. Engine-level adaptations require a separate VANILLAJS PR. The owner granted one exception for BS-001 at v3.2.0. [Approved armour method and file hashes](ENGINE_INTEGRATION.md#armour-pickup)
 
 ## Build/release evidence
 

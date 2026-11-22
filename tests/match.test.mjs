@@ -7,7 +7,7 @@ import {findPath} from '../vendor/vanillajs/modules/navigation/index.js';
 import {readArena,spawnPoint,sight} from '../src/sim/arena.js';
 import {Match,MatchSlot,matchEnd,STEP} from '../src/sim/match.js';
 import {receipt,verify} from '../src/sim/replay.js';
-import {FLAG,NEUTRAL} from '../src/sim/command.js';
+import {ANGLE,FLAG,NEUTRAL} from '../src/sim/command.js';
 
 const text=readFileSync(new URL('../content/foundry.json',import.meta.url),'utf8'), arena=readArena(text);
 const game=options=>new Match(arena,options);
@@ -15,6 +15,32 @@ const input=(flags=0,slot=-1)=>[0,0,0,0,flags,slot];
 function variant(edit) {
   const data=JSON.parse(text), parts=Object.fromEntries(data.pack.entries.map(e=>[e.id,e.data]));
   edit(parts,data); return JSON.stringify(data);
+}
+
+for (const jumping of [false,true]) {
+  const direction=jumping?'upper':'lower';
+  test(`pursuing the nearest rival reaches the ${direction} bot pitch bound and finishes the match`,()=>{
+    const m=game(), bound=(jumping?1:-1)*(Math.PI/2-.01);
+    let reached=false;
+    while (!m.result) {
+      const [x,,z]=m.actor('player').position;
+      const distance=a=>Math.hypot(a.position[0]-x,a.position[2]-z);
+      const rivals=m.state.actors.filter(a=>a.id!=='player' && a.health>0);
+      const target=rivals.sort((a,b)=>distance(a)-distance(b))[0];
+      let turn=0;
+      if (target) {
+        const yaw=Math.atan2(x-target.position[0],z-target.position[2]);
+        const delta=yaw-m.units[0].body.yaw;
+        const shortest=Math.atan2(Math.sin(delta),Math.cos(delta));
+        turn=Math.max(-31415,Math.min(31415,Math.round(shortest*ANGLE)));
+      }
+      const flags=jumping && m.tick%42===0 ? FLAG.jump : 0;
+      m.step([0,-1,turn,0,flags,-1]);
+      if (m.units.some(u=>u.profile && u.body.pitch===bound)) reached=true;
+    }
+    assert(reached,`No bot reached the ${direction} bound`);
+    assert.equal(m.result.reason,'frag limit');
+  });
 }
 
 test('human fires a real rivet frag, bots eliminate one another and the operator; default match ends with consistent accounts',()=>{
@@ -135,4 +161,23 @@ test('simultaneous nearby pad claim goes to the first eligible living actor in e
   const m=new Match(readArena(source));m.step();
   assert.deepEqual(m.events.filter(e=>e.type==='pickup'&&e.kind==='armour').map(e=>e.actor),['kiln']);
   assert.equal(m.actor('player').armour,25);assert.equal(m.actor('kiln').armour,60);
+});
+
+test('a full bot leaves the plate available for a player who can use ten points',()=>{
+  const source=variant(p=>{
+    p.spawns.bots[0]=[0,0,12.5];
+    p.spawns.pickups.find(pad=>pad.id==='plate-press').position=[0,0,12.5];
+    p.bots.types[0].armour=100;
+    p.settings.rules.playerArmour=90;
+  });
+  const m=new Match(readArena(source)), pad=m.pickups.find(p=>p.id==='plate-press');
+  m.step();
+  assert.equal(m.actor('kiln').armour,100);
+  assert.equal(pad.ready,0);
+  assert(!m.events.some(e=>e.type==='pickup' && e.pad===pad.id));
+  for (let i=0; i<16 && pad.ready===0; i++) m.step([0,-1,0,0,0,-1]);
+  const claims=m.events.filter(e=>e.type==='pickup' && e.pad===pad.id);
+  assert.deepEqual(claims.map(e=>[e.actor,e.amount]),[['player',10]]);
+  assert.equal(m.actor('player').armour,100);
+  assert.equal(pad.ready,m.tick+720);
 });
