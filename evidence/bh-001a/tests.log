@@ -1,0 +1,42 @@
+✔ same strafe, reversal and jump inputs give measurable Arcade and Classic handling (264.350416ms)
+✔ an early jump chains once on landing; cancellation and Classic discard the early edge (271.516668ms)
+✔ bot skill changes the first visible reaction and aim error with equal actors, weapons and damage rules (66.140238ms)
+✔ a covered respawn beats a longer exposed lane and occupied starts are never selected (11.429268ms)
+✔ fresh reserves leave pads live; a real reload grants one shared refill on overlapping pads (68.793373ms)
+✔ format 2 binds tuning even at tick zero; the archived format 1 reference still verifies (2080.96288ms)
+✔ damage and stereo bearings agree with the right-handed camera (0.500912ms)
+✔ focus narrows the lens and spread without steering the canonical shot; legacy commands reject the new bit (22.887375ms)
+✔ a health pad stays live at full health and starts its nine-second cooldown on real combat damage (54.39582ms)
+✔ engine limitation and consumer armour parity: a real armour pickup absorbs damage on the same actor (21.528206ms)
+✔ stone stops hitscan and travelling splash; unoccluded projectile travels before damaging a rival (9.824078ms)
+✔ simultaneous real shots produce both eliminations before the match ranks the tick (1.367514ms)
+✔ precision needs an edge, repeater sustains, timers survive switching, reload consumes reserve (148.002527ms)
+✔ 16 actors and 64 active rounds are hard caps; rejected rounds consume ammo, expiry releases slots (966.455311ms)
+✔ a cardinal quaternion one ULP outside the Combat3D interval is admitted without changing its ray (5.97031ms)
+✔ pursuing the nearest rival reaches the lower bot pitch bound and finishes the match (2835.381047ms)
+✔ pursuing the nearest rival reaches the upper bot pitch bound and finishes the match (2668.636667ms)
+✔ human fires a real rivet frag, bots eliminate one another and the operator; default match ends with consistent accounts (6234.218743ms)
+✔ isolated playback at 30, 60 and 120 Hz reproduces accepted commands, event and state digests (1580.155459ms)
+✔ content and command rejection preserves the active match byte for byte (12.013553ms)
+✔ real movement hits the wall, clears a staircase and jumps without tunnelling (22.266365ms)
+✔ respawns avoid occupied volumes and choose the best admitted cover/distance score deterministically (3.797426ms)
+✔ timed pads award a single eligible claimant, cap armour and preserve frags after recasting (63.229977ms)
+✔ ties use fewer deaths then code-unit actor ID; a simultaneous limit wins over the time limit (0.394651ms)
+✔ bounded clock drops long gaps and resets debt across pause and resume (0.373482ms)
+✔ simultaneous nearby pad claim goes to the first eligible living actor in engine ID order (4.927044ms)
+✔ a full bot leaves the plate available for a player who can use ten points (8.171454ms)
+✔ every upstream byte and transitive import is receipted; consumer derivative is reproducible (12.924524ms)
+✔ relative sweep includes tangency, fast crossings and same-tick player motion (32.516705ms)
+✔ emission budget, capacity, geometry and final life tick are enforced (1.036025ms)
+✔ five emitted shape/trajectory signatures include warning and expiry ticks (9.870167ms)
+✔ each pattern hits an idle body and admits a delayed real-controller dodge (127.790954ms)
+✔ one event per HP change, exact invulnerability and terminal isolation (75.712297ms)
+✔ live 30/60/120 Hz schedules, independently re-executed receipts and phase ticks (297.557685ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13653.644379
