@@ -104,6 +104,12 @@ Those numbers describe **that measured hosted run only**. They are *not* native 
 
 The recorded BS-002 execution passed **28 consumer tests** on Node 24.22.3, verified browser replay in the producing Chromium environment, and exercised repeated match teardown. Manual mouse-feel/audio assessment, native GPU testing, other browser families and an eight-bot stress ladder remain open.
 
+## Experimental next game — STORM PROTOCOL (proposal)
+
+Imagine the foundry floor becoming a 3D bullet-hell arena: **one human versus a giant reactor boss**, threading real, damaging radial rings, spirals and sweeping walls of neon projectiles. The existing Deathmatch stays untouched.
+
+This is a **planning proposal, not a playable mode**. [Read the design and engineering limits](docs/BULLET_HELL_001.md) · [ChatGPT Work implementation handoff](docs/BULLET_HELL_WORK_HANDOFF.md). The engine's Combat3D combat pool remains capped at 64 live projectiles; higher-density patterns require a separately tested bounded authority and honest GPU measurements.
+
 ## Documentation and next work
 
 | Document | Purpose |
